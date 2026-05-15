@@ -84,6 +84,23 @@ nav:
     - NVFP4 量化: nvidia/nvfp4-quantization.md
     - Ollama: nvidia/ollama.md
     - OpenClaw 🦞: nvidia/openclaw.md
+    - Open WebUI: nvidia/open-webui.md
+    - OpenShell: nvidia/openshell.md
+    - 投资组合优化: nvidia/portfolio-optimization.md
+    - PyTorch 微调: nvidia/pytorch-fine-tune.md
+    - RAG AI Workbench: nvidia/rag-ai-workbench.md
+    - sglang: nvidia/sglang.md
+    - 单细胞 RNA 测序: nvidia/single-cell.md
+    - Spark & Reachy 照片亭: nvidia/spark-reachy-photo-booth.md
+    - 推测性解码: nvidia/speculative-decoding.md
+    - 设置 Tailscale: nvidia/tailscale.md
+    - TRT-LLM 用于推理: nvidia/trt-llm.md
+    - 文本到知识图谱: nvidia/txt2kg.md
+    - Unsloth 微调: nvidia/unsloth.md
+    - VS Code 中的 Vibe Coding: nvidia/vibe-coding.md
+    - vLLM: nvidia/vllm.md
+    - VS Code: nvidia/vscode.md
+    - VSS: nvidia/vss.md
   - 项目信息:
     - 关于: about.md
     - 贡献指南: contribute.md
