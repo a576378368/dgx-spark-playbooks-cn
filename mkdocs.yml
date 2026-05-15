@@ -1,0 +1,104 @@
+# MkDocs 配置文件
+site_name: DGX Spark Playbooks 中文版
+site_description: NVIDIA DGX Spark 中文使用指南
+site_url: https://yangfeng.github.io/dgx-spark-playbooks-cn
+
+# 主题配置
+theme:
+  name: material
+  language: zh
+  palette:
+    - scheme: default
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  logo: images/logo.png
+  favicon: images/favicon.png
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotation
+    - content.code.copy
+
+# 代码高亮
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.arithmatex:
+      generic: true
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.mark
+  - pymdownx.tilde
+  - tables
+  - def_list
+  - footnotes
+  - meta
+
+# 插件
+plugins:
+  - search
+  - tags
+
+# 导航结构
+nav:
+  - 首页: index.md
+  - NVIDIA:
+    - Comfy UI: nvidia/comfy-ui.md
+    - 在环形拓扑中连接三个 DGX Spark: nvidia/connect-three-sparks.md
+    - 设置本地网络访问: nvidia/connect-to-your-spark.md
+    - 连接两个 Spark 设备: nvidia/connect-two-sparks.md
+    - CUDA-X 数据科学: nvidia/cuda-x-data-science.md
+    - DGX Dashboard: nvidia/dgx-dashboard.md
+    - FLUX.1 Dreambooth LoRA 微调: nvidia/flux-finetuning.md
+    - 安装和使用 Isaac Sim 和 Isaac Lab: nvidia/isaac.md
+    - 优化 JAX: nvidia/jax.md
+    - Live VLM WebUI: nvidia/live-vlm-webui.md
+    - 在 DGX Spark 上使用 llama.cpp 运行模型: nvidia/llama-cpp.md
+    - LLaMA Factory: nvidia/llama-factory.md
+    - LM Studio on DGX Spark: nvidia/lm-studio.md
+    - 构建和部署多智能体聊天机器人: nvidia/multi-agent-chatbot.md
+    - 多模态推理: nvidia/multi-modal-inference.md
+    - 通过交换机连接多个 DGX Spark: nvidia/multi-sparks-through-switch.md
+    - 两个 Spark 的 NCCL: nvidia/nccl.md
+    - NemoClaw with Nemotron 3 Super 和 Telegram on DGX Spark: nvidia/nemoclaw.md
+    - 使用 NeMo 进行微调: nvidia/nemo-fine-tune.md
+    - Nemotron-3-Nano 使用 llama.cpp: nvidia/nemotron.md
+    - Spark 上的 NIM: nvidia/nim-llm.md
+    - NVFP4 量化: nvidia/nvfp4-quantization.md
+    - Ollama: nvidia/ollama.md
+    - OpenClaw 🦞: nvidia/openclaw.md
+  - 项目信息:
+    - 关于: about.md
+    - 贡献指南: contribute.md
+
+# 社交链接
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/yangfeng
+    - icon: fontawesome/brands/docker
+      link: https://hub.docker.com/
+    - icon: fontawesome/brands/python
+      link: https://www.python.org/
+
+# 版权信息
+copyright: Copyright © 2026 YangFeng
+repo_url: https://github.com/yangfeng/dgx-spark-playbooks-cn
+edit_uri: edit/main/translated-site/docs/
