@@ -1,7 +1,7 @@
 # MkDocs 配置文件
 site_name: DGX Spark Playbooks 中文版
 site_description: NVIDIA DGX Spark 中文使用指南
-site_url: https://yangfeng.github.io/dgx-spark-playbooks-cn
+site_url: https://a576378368.github.io/dgx-spark-playbooks-cn
 
 # 主题配置
 theme:
@@ -109,7 +109,7 @@ nav:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/yangfeng
+      link: https://github.com/a576378368
     - icon: fontawesome/brands/docker
       link: https://hub.docker.com/
     - icon: fontawesome/brands/python
@@ -117,5 +117,5 @@ extra:
 
 # 版权信息
 copyright: Copyright © 2026 YangFeng
-repo_url: https://github.com/yangfeng/dgx-spark-playbooks-cn
+repo_url: https://github.com/a576378368/dgx-spark-playbooks-cn
 edit_uri: edit/main/translated-site/docs/
