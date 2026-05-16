@@ -56,7 +56,7 @@ mkdocs serve
 
 ### 在线访问
 
-访问我们的 GitHub Pages 页面：[https://yangfeng.github.io/dgx-spark-playbooks-cn](https://yangfeng.github.io/dgx-spark-playbooks-cn)
+访问我们的 GitHub Pages 页面：[https://a576378368.github.io/dgx-spark-playbooks-cn](https://a576378368.github.io/dgx-spark-playbooks-cn)
 
 ## 🤝 贡献
 

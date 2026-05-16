@@ -17,5 +17,5 @@
 
 ## 联系方式
 
-- GitHub: [@yangfeng](https://github.com/yangfeng)
-- 项目仓库: [dgx-spark-playbooks-cn](https://github.com/yangfeng/dgx-spark-playbooks-cn)
+- GitHub: [@a576378368](https://github.com/a576378368)
+- 项目仓库: [dgx-spark-playbooks-cn](https://github.com/a576378368/dgx-spark-playbooks-cn)
