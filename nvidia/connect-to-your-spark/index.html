@@ -1,0 +1,1992 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="NVIDIA DGX Spark 中文使用指南">
+      
+      
+      
+        <link rel="canonical" href="https://a576378368.github.io/dgx-spark-playbooks-cn/nvidia/connect-to-your-spark/">
+      
+      
+        <link rel="prev" href="../connect-three-sparks/">
+      
+      
+        <link rel="next" href="../connect-two-sparks/">
+      
+      
+      <link rel="icon" href="../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.35">
+    
+    
+      
+        <title>设置本地网络访问 - DGX Spark Playbooks 中文版</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.35f28582.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="DGX Spark Playbooks 中文版" class="md-header__button md-logo" aria-label="DGX Spark Playbooks 中文版" data-md-component="logo">
+      
+  <img src="../../images/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            DGX Spark Playbooks 中文版
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              设置本地网络访问
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/a576378368/dgx-spark-playbooks-cn" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../comfy-ui/" class="md-tabs__link">
+          
+  
+  NVIDIA
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../about/" class="md-tabs__link">
+          
+  
+  项目信息
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="DGX Spark Playbooks 中文版" class="md-nav__button md-logo" aria-label="DGX Spark Playbooks 中文版" data-md-component="logo">
+      
+  <img src="../../images/logo.png" alt="logo">
+
+    </a>
+    DGX Spark Playbooks 中文版
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/a576378368/dgx-spark-playbooks-cn" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    首页
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    NVIDIA
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            NVIDIA
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../comfy-ui/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Comfy UI
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../connect-three-sparks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在环形拓扑中连接三个 DGX Spark
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    设置本地网络访问
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    设置本地网络访问
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      目录
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      概述
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      基本概念
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      您将实现的目标
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      开始前须知
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      先决条件
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      时间与风险
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nvidia-sync" class="md-nav__link">
+    <span class="md-ellipsis">
+      使用 NVIDIA Sync 连接
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-nvidia-sync" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 1. 安装 NVIDIA Sync
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 2. 配置应用程序
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-dgx-spark" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 3. 添加 DGX Spark 设备
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-dgx-spark" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 4. 访问您的 DGX Spark
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-ssh" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 5. 验证 SSH 设置
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 6. 后续步骤
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ssh" class="md-nav__link">
+    <span class="md-ellipsis">
+      使用手动 SSH 连接
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-ssh" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 1. 验证 SSH 客户端可用性
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 2. 收集连接信息
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 3. 测试初始连接
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 4. 验证远程连接
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-ssh-web" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 5. 使用 SSH 隧道访问 Web 应用程序
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 6. 后续步骤
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      故障排除
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nvidia-sync_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      通过 NVIDIA Sync 连接的可能问题
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ssh_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      通过手动 SSH 连接的可能问题
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../connect-two-sparks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    连接两个 Spark 设备
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cuda-x-data-science/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CUDA-X 数据科学
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dgx-dashboard/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DGX Dashboard
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flux-finetuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FLUX.1 Dreambooth LoRA 微调
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../isaac/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    安装和使用 Isaac Sim 和 Isaac Lab
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jax/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    优化 JAX
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../live-vlm-webui/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Live VLM WebUI
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llama-cpp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 DGX Spark 上使用 llama.cpp 运行模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llama-factory/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LLaMA Factory
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lm-studio/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LM Studio on DGX Spark
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi-agent-chatbot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    构建和部署多智能体聊天机器人
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi-modal-inference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    多模态推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi-sparks-through-switch/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    通过交换机连接多个 DGX Spark
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nccl/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    两个 Spark 的 NCCL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nemoclaw/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    NemoClaw with Nemotron 3 Super 和 Telegram on DGX Spark
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nemo-fine-tune/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 NeMo 进行微调
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nemotron/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nemotron-3-Nano 使用 llama.cpp
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nim-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Spark 上的 NIM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nvfp4-quantization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    NVFP4 量化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ollama/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ollama
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../openclaw/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OpenClaw 🦞
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../open-webui/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Open WebUI
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../openshell/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OpenShell
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../portfolio-optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    投资组合优化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pytorch-fine-tune/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PyTorch 微调
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rag-ai-workbench/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    RAG AI Workbench
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sglang/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sglang
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../single-cell/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    单细胞 RNA 测序
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spark-reachy-photo-booth/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Spark & Reachy 照片亭
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../speculative-decoding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    推测性解码
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tailscale/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    设置 Tailscale
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trt-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TRT-LLM 用于推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../txt2kg/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    文本到知识图谱
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../unsloth/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Unsloth 微调
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vibe-coding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    VS Code 中的 Vibe Coding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vllm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    vLLM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vscode/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    VS Code
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vss/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    VSS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    项目信息
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            项目信息
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    关于
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contribute/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    贡献指南
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="_1">设置本地网络访问</h1>
+<blockquote>
+<p>NVIDIA Sync 可帮助设置和配置 SSH 访问</p>
+</blockquote>
+<h2 id="_2">目录</h2>
+<ul>
+<li><a href="#概述">概述</a></li>
+<li><a href="#使用-nvidia-sync-连接">使用 NVIDIA Sync 连接</a></li>
+<li><a href="#使用手动-ssh-连接">使用手动 SSH 连接</a></li>
+<li><a href="#故障排除">故障排除</a></li>
+</ul>
+<hr />
+<h2 id="_3">概述</h2>
+<h2 id="_4">基本概念</h2>
+<p>如果您主要在另一台系统（例如笔记本电脑）上工作，并希望将 DGX Spark 作为远程资源使用，本指南将向您展示如何通过 SSH 连接和工作。通过 SSH，您可以安全地打开终端会话或进行端口转发，以从本地计算机访问 DGX Spark 上的 Web 应用和 API。</p>
+<p>有两种方法：<strong>NVIDIA Sync（推荐）</strong> 用于简化设备管理，或<strong>手动 SSH</strong> 用于直接命令行控制。</p>
+<p>开始之前，需要了解一些重要概念：</p>
+<p><strong>安全外壳协议（SSH）</strong> 是一种加密协议，用于通过不可信网络安全地连接到远程计算机。它允许您在 DGX Spark 上打开终端，就像您坐在设备前一样，运行命令、传输文件和管理服务——所有操作都进行端到端加密。</p>
+<p><strong>SSH 隧道</strong>（也称为端口转发）可以安全地将笔记本电脑上的端口（例如 localhost:8888）映射到 DGX Spark 上的应用监听端口（例如 JupyterLab 的 8888 端口）。您的浏览器连接到 localhost，SSH 会通过加密连接将流量转发到远程服务，而不会在更广泛的网络上暴露该端口。</p>
+<p><strong>mDNS（组播 DNS）</strong> 允许设备在本地网络上通过名称相互发现，而无需中央 DNS 服务器。您的 DGX Spark 通过 mDNS 公布其主机名，因此您可以使用 <code>spark-abcd.local</code>（注意 <code>.local</code> 后缀）这样的名称连接，而无需查找其 IP 地址。</p>
+<h2 id="_5">您将实现的目标</h2>
+<p>您将使用 NVIDIA Sync 或手动 SSH 配置建立到 DGX Spark 设备的安全 SSH 访问。NVIDIA Sync 提供了集成应用程序启动功能的图形化设备管理界面，而手动 SSH 提供了端口转发功能的直接命令行控制。两种方法都使您能够从笔记本电脑远程运行终端命令、访问 Web 应用程序和管理 DGX Spark。</p>
+<h2 id="_6">开始前须知</h2>
+<ul>
+<li>基本的终端/命令行使用经验</li>
+<li>了解 SSH 概念和基于密钥的身份验证</li>
+<li>熟悉网络概念，如主机名、IP 地址和端口转发</li>
+</ul>
+<h2 id="_7">先决条件</h2>
+<ul>
+<li>您的 DGX Spark <a href="https://docs.nvidia.com/dgx/dgx-spark/first-boot.html">设备已设置</a>，并且您已创建本地用户账户</li>
+<li>您的笔记本电脑和 DGX Spark 在同一网络上</li>
+<li>您拥有 DGX Spark 的用户名和密码</li>
+<li>您拥有设备的 mDNS 主机名（印在快速入门指南上）或 IP 地址</li>
+</ul>
+<h2 id="_8">时间与风险</h2>
+<ul>
+<li><strong>时间估算：</strong> 5-10 分钟</li>
+<li><strong>风险等级：</strong> 低 - SSH 设置涉及凭据配置，但不会对 DGX Spark 设备进行系统级更改</li>
+<li><strong>回滚方案：</strong> 可以通过编辑 DGX Spark 上的 <code>~/.ssh/authorized_keys</code> 来移除 SSH 密钥</li>
+<li><strong>最后更新：</strong> 2025年10月28日</li>
+<li>少量文字编辑</li>
+</ul>
+<hr />
+<h2 id="nvidia-sync">使用 NVIDIA Sync 连接</h2>
+<h2 id="1-nvidia-sync">步骤 1. 安装 NVIDIA Sync</h2>
+<p>NVIDIA Sync 是一个桌面应用程序，可通过本地网络将您的计算机连接到 DGX Spark。它为您提供了一个统一界面，用于管理 SSH 访问和在 DGX Spark 上启动开发工具。</p>
+<p>下载并安装 NVIDIA Sync 以开始使用。</p>
+<p><strong>对于 macOS</strong></p>
+<ul>
+<li>下载后，打开 <code>nvidia-sync.dmg</code></li>
+<li>将应用程序拖放到 Applications 文件夹中</li>
+<li>从 Applications 文件夹中打开 <code>NVIDIA Sync</code></li>
+</ul>
+<p><strong>对于 Windows</strong></p>
+<ul>
+<li>下载后，运行安装程序 .exe</li>
+<li>安装完成后，NVIDIA Sync 将自动启动</li>
+</ul>
+<p><strong>对于 Debian/Ubuntu</strong></p>
+<ul>
+<li>配置软件包仓库：</li>
+</ul>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl -fsSL  https://workbench.download.nvidia.com/stable/linux/gpgkey  |  sudo tee -a /etc/apt/trusted.gpg.d/ai-workbench-desktop-key.asc
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>echo &quot;deb https://workbench.download.nvidia.com/stable/linux/debian default proprietary&quot; | sudo tee -a /etc/apt/sources.list
+</code></pre></div>
+* 更新软件包列表：</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>sudo apt update
+</code></pre></div>
+* 安装 NVIDIA Sync：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo apt install nvidia-sync
+</code></pre></div>
+<h2 id="2">步骤 2. 配置应用程序</h2>
+<p>应用程序是安装在您笔记本电脑上的桌面程序，NVIDIA Sync 可以配置并启动这些程序，自动连接到您的 Spark。</p>
+<p>您随时可以在设置窗口中更改应用程序选择。标记为"不可用"的应用程序必须先安装才能使用。</p>
+<p><strong>默认应用程序：</strong>
+- <strong>DGX Dashboard</strong>：DGX Spark 上预装的 Web 应用程序，用于系统管理和集成的 JupyterLab 访问
+- <strong>Terminal</strong>：带有自动 SSH 连接的系统内置终端</p>
+<p><strong>可选应用程序（需要单独安装）：</strong>
+- <strong>VS Code</strong>：从 https://code.visualstudio.com/download 下载
+- <strong>Cursor</strong>：从 https://cursor.com/downloads 下载
+- <strong>NVIDIA AI Workbench</strong>：从 https://www.nvidia.com/workbench 下载</p>
+<h2 id="3-dgx-spark">步骤 3. 添加 DGX Spark 设备</h2>
+<blockquote>
+<p>[!NOTE]
+您必须知道主机名或 IP 地址才能连接。</p>
+<ul>
+<li>默认主机名可以在随附的快速入门指南中找到。例如，<code>spark-abcd.local</code></li>
+<li>如果您的设备已连接显示器，您可以在 <a href="http://localhost:11000">DGX Dashboard</a> 的设置页面找到主机名。</li>
+<li>如果网络上 <code>.local</code>（mDNS）主机名不起作用，则必须使用 IP 地址。这可以在 Ubuntu 的网络设置中找到，或通过登录路由器的管理控制台获取。</li>
+</ul>
+</blockquote>
+<p>最后，填写表格连接您的 DGX Spark：</p>
+<ul>
+<li><strong>名称</strong>：一个描述性名称（例如，"My DGX Spark"）</li>
+<li><strong>主机名或 IP</strong>：Spark 的 mDNS 主机名（例如 <code>spark-abcd.local</code>）或 IP 地址</li>
+<li><strong>用户名</strong>：您的 DGX Spark 用户账户名称</li>
+<li><strong>密码</strong>：您的 DGX Spark 用户账户密码</li>
+</ul>
+<blockquote>
+<p>[!NOTE]
+您的密码仅在此初始设置期间用于配置 SSH 密钥身份验证。设置完成后，密码将不被存储或传输。NVIDIA Sync 将 SSH 到您的设备并配置其本地提供的 SSH 密钥对。</p>
+</blockquote>
+<p>点击"添加"按钮，NVIDIA Sync 将自动：</p>
+<ol>
+<li>在您的笔记本电脑上生成 SSH 密钥对</li>
+<li>使用您提供的用户名和密码连接到 DGX Spark</li>
+<li>将公钥添加到设备上的 <code>~/.ssh/authorized_keys</code></li>
+<li>在本地创建 SSH 别名以供将来连接</li>
+<li>丢弃您的用户名和密码信息</li>
+</ol>
+<blockquote>
+<p>[!IMPORTANT]
+第一次完成系统设置后，您的设备可能需要几分钟时间更新并在网络上可用。如果 NVIDIA Sync 连接失败，请等待 3-4 分钟后再试。</p>
+</blockquote>
+<h2 id="4-dgx-spark">步骤 4. 访问您的 DGX Spark</h2>
+<p>连接后，NVIDIA Sync 显示为系统托盘/任务栏应用程序。点击 NVIDIA Sync 图标打开设备管理界面。</p>
+<ul>
+<li><strong>SSH 连接</strong>：点击大型的"连接"和"断开连接"按钮可控制到设备的总体 SSH 连接。</li>
+<li><strong>设置工作目录</strong>（可选）：选择通过 NVIDIA Sync 启动时应用程序将打开的默认目录。默认为远程设备上的主目录。</li>
+<li><strong>启动应用程序</strong>：点击任何配置的应用程序以通过自动 SSH 连接到 DGX Spark 打开它。</li>
+<li><strong>自定义端口</strong>（可选）："自定义端口"在设置屏幕中配置，以提供对设备上运行的自定义 Web 应用或 API 的访问。</li>
+</ul>
+<h2 id="5-ssh">步骤 5. 验证 SSH 设置</h2>
+<p>NVIDIA Sync 为您的设备创建 SSH 别名，以便从其他 SSH 启用的应用程序手动或轻松访问。</p>
+<p>通过使用 SSH 别名验证您的本地 SSH 配置是否正确。使用别名时，系统不应提示您输入密码：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">## 如果您使用 mDNS 主机名进行配置</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ssh<span class="w"> </span>&lt;SPARK_HOSTNAME&gt;.local
+</code></pre></div>
+<p>或</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1">## 如果您使用 IP 地址进行配置</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>ssh<span class="w"> </span>&lt;IP&gt;
+</code></pre></div>
+<p>在 DGX Spark 上，验证您已连接：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>hostname
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>whoami
+</code></pre></div>
+<p>退出 SSH 会话：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nb">exit</span>
+</code></pre></div>
+<h2 id="6">步骤 6. 后续步骤</h2>
+<p>通过启动开发工具测试您的设置：
+- 点击 NVIDIA Sync 系统托盘图标。
+- 选择 "Terminal" 在 DGX Spark 上打开终端会话。
+- 选择 "DGX Dashboard" 使用 JupyterLab 和管理更新。
+- 尝试 <a href="/spark/open-webui/sync">使用 Open WebUI 的自定义端口示例</a>。</p>
+<hr />
+<h2 id="ssh">使用手动 SSH 连接</h2>
+<h2 id="1-ssh">步骤 1. 验证 SSH 客户端可用性</h2>
+<p>确认您的系统上已安装 SSH 客户端。大多数现代操作系统默认包含 SSH。在终端中运行以下命令：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1">## 检查 SSH 客户端版本</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>ssh<span class="w"> </span>-V
+</code></pre></div>
+<p>预期输出应显示 OpenSSH 版本信息。</p>
+<h2 id="2_1">步骤 2. 收集连接信息</h2>
+<p>收集 DGX Spark 所需的连接详细信息：</p>
+<ul>
+<li><strong>用户名</strong>：您的 DGX Spark 用户账户名称</li>
+<li><strong>密码</strong>：您的 DGX Spark 账户密码</li>
+<li><strong>主机名</strong>：您设备的 mDNS 主机名（来自快速入门指南，例如 <code>spark-abcd.local</code>）</li>
+<li><strong>IP 地址</strong>：仅在 mDNS 在您的网络上不起作用时才需要的替代方案（如下所述）</li>
+</ul>
+<p>在某些网络配置中，例如复杂的公司环境，mDNS 可能无法按预期工作，您将必须直接使用设备的 IP 地址进行连接。您会知道您处于这种情况，当您尝试 SSH 时，命令无限期挂起或您得到如下错误：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>ssh: Could not resolve hostname spark-abcd.local: Name or service not known
+</code></pre></div>
+<p><strong>测试 mDNS 解析</strong></p>
+<p>要测试 mDNS 是否正常工作，请使用 <code>ping</code> 工具：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>ping<span class="w"> </span>spark-abcd.local
+</code></pre></div>
+<p>如果 mDNS 正常工作并且您可以使用主机名进行 SSH，您应该看到类似以下内容：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>$ ping -c 3 spark-abcd.local
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>PING spark-abcd.local (10.9.1.9): 56 data bytes
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>64 bytes from 10.9.1.9: icmp_seq=0 ttl=64 time=6.902 ms
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>64 bytes from 10.9.1.9: icmp_seq=1 ttl=64 time=116.335 ms
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>64 bytes from 10.9.1.9: icmp_seq=2 ttl=64 time=33.301 ms
+</code></pre></div>
+<p>如果 mDNS <strong>不</strong>正常工作，表明您必须直接使用 IP 地址，您将看到类似以下内容：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>$ ping -c 3 spark-abcd.local
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>ping: cannot resolve spark-abcd.local: Unknown host
+</code></pre></div>
+<p>如果以上方法均不起作用，您需要：
+- 登录路由器的管理面板查找 IP 地址
+- 连接显示器、键盘和鼠标以从 Ubuntu 桌面检查</p>
+<h2 id="3">步骤 3. 测试初始连接</h2>
+<p>首次连接到您的 DGX Spark 以验证基本连接性：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1">## 使用 mDNS 主机名连接（推荐）</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>ssh<span class="w"> </span>&lt;YOUR_USERNAME&gt;@&lt;SPARK_HOSTNAME&gt;.local
+</code></pre></div>
+<p>或</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1">## 替代方案：使用 IP 地址连接</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>ssh<span class="w"> </span>&lt;YOUR_USERNAME&gt;@&lt;DEVICE_IP_ADDRESS&gt;
+</code></pre></div>
+<p>将占位符替换为您的实际值：
+- <code>&lt;YOUR_USERNAME&gt;</code>：您的 DGX Spark 账户名称
+- <code>&lt;SPARK_HOSTNAME&gt;</code>：不带 <code>.local</code> 后缀的设备主机名
+- <code>&lt;DEVICE_IP_ADDRESS&gt;</code>：您的设备 IP 地址</p>
+<p>首次连接时，您会看到主机指纹警告。输入 <code>yes</code> 并按回车，然后在提示时输入密码。</p>
+<h2 id="4">步骤 4. 验证远程连接</h2>
+<p>连接后，确认您在 DGX Spark 设备上：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1">## 检查主机名</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>hostname
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="c1">## 检查系统信息</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>uname<span class="w"> </span>-a
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="c1">## 退出会话</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="nb">exit</span>
+</code></pre></div>
+<h2 id="5-ssh-web">步骤 5. 使用 SSH 隧道访问 Web 应用程序</h2>
+<p>要访问 DGX Spark 上运行的 Web 应用程序，请使用 SSH 端口转发。在此示例中，我们将访问 DGX Dashboard Web 应用程序。</p>
+<blockquote>
+<p>[!NOTE]
+DGX Dashboard 运行在 localhost，端口 11000。</p>
+</blockquote>
+<p>打开隧道：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1">## 本地端口 11000 → 远程端口 11000</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>ssh<span class="w"> </span>-L<span class="w"> </span><span class="m">11000</span>:localhost:11000<span class="w"> </span>&lt;YOUR_USERNAME&gt;@&lt;SPARK_HOSTNAME&gt;.local
+</code></pre></div>
+<p>建立隧道后，在浏览器中访问转发的 Web 应用：<a href="http://localhost:11000">http://localhost:11000</a></p>
+<h2 id="6_1">步骤 6. 后续步骤</h2>
+<p>配置 SSH 访问后，您可以：
+- 打开持久终端会话：<code>ssh &lt;YOUR_USERNAME&gt;@&lt;SPARK_HOSTNAME&gt;.local</code>
+- 转发 Web 应用端口：<code>ssh -L &lt;local_port&gt;:localhost:&lt;remote_port&gt; &lt;YOUR_USERNAME&gt;@&lt;SPARK_HOSTNAME&gt;.local</code></p>
+<hr />
+<h2 id="_9">故障排除</h2>
+<h2 id="nvidia-sync_1">通过 NVIDIA Sync 连接的可能问题</h2>
+<table>
+<thead>
+<tr>
+<th>症状</th>
+<th>原因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>设备名称无法解析</td>
+<td>网络上阻止 mDNS</td>
+<td>使用 IP 地址而不是 hostname.local</td>
+</tr>
+<tr>
+<td>连接被拒绝/超时</td>
+<td>DGX Spark 未启动或 SSH 未就绪</td>
+<td>等待设备启动完成；更新完成后 SSH 可用</td>
+</tr>
+<tr>
+<td>身份验证失败</td>
+<td>SSH 密钥设置不完整</td>
+<td>重新运行 NVIDIA Sync 中的设备设置；检查凭据</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ssh_1">通过手动 SSH 连接的可能问题</h2>
+<table>
+<thead>
+<tr>
+<th>症状</th>
+<th>原因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>设备名称无法解析</td>
+<td>网络上阻止 mDNS</td>
+<td>使用 IP 地址而不是 hostname.local</td>
+</tr>
+<tr>
+<td>连接被拒绝/超时</td>
+<td>DGX Spark 未启动或 SSH 未就绪</td>
+<td>等待设备启动完成；更新完成后 SSH 可用</td>
+</tr>
+<tr>
+<td>端口转发失败</td>
+<td>服务未运行或端口冲突</td>
+<td>验证远程服务是否激活；尝试不同的本地端口</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © 2026 YangFeng
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/a576378368" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://hub.docker.com/" target="_blank" rel="noopener" title="hub.docker.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M349.9 236.3h-66.1v-59.4h66.1zm0-204.3h-66.1v60.7h66.1zm78.2 144.8H362v59.4h66.1zm-156.3-72.1h-66.1v60.1h66.1zm78.1 0h-66.1v60.1h66.1zm276.8 100c-14.4-9.7-47.6-13.2-73.1-8.4-3.3-24-16.7-44.9-41.1-63.7l-14-9.3-9.3 14c-18.4 27.8-23.4 73.6-3.7 103.8-8.7 4.7-25.8 11.1-48.4 10.7H2.4c-8.7 50.8 5.8 116.8 44 162.1 37.1 43.9 92.7 66.2 165.4 66.2 157.4 0 273.9-72.5 328.4-204.2 21.4.4 67.6.1 91.3-45.2 1.5-2.5 6.6-13.2 8.5-17.1zm-511.1-27.9h-66v59.4h66.1v-59.4zm78.1 0h-66.1v59.4h66.1zm78.1 0h-66.1v59.4h66.1zm-78.1-72.1h-66.1v60.1h66.1z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.python.org/" target="_blank" rel="noopener" title="www.python.org" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6M286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3M167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4m-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.sections", "toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.56dfad97.min.js"></script>
+      
+    
+  </body>
+</html>

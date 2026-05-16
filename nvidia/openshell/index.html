@@ -1,0 +1,2301 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="NVIDIA DGX Spark 中文使用指南">
+      
+      
+      
+        <link rel="canonical" href="https://a576378368.github.io/dgx-spark-playbooks-cn/nvidia/openshell/">
+      
+      
+        <link rel="prev" href="../open-webui/">
+      
+      
+        <link rel="next" href="../portfolio-optimization/">
+      
+      
+      <link rel="icon" href="../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.35">
+    
+    
+      
+        <title>OpenShell - DGX Spark Playbooks 中文版</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.35f28582.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#dgx-spark-openshell-ai" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="DGX Spark Playbooks 中文版" class="md-header__button md-logo" aria-label="DGX Spark Playbooks 中文版" data-md-component="logo">
+      
+  <img src="../../images/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            DGX Spark Playbooks 中文版
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              OpenShell
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/a576378368/dgx-spark-playbooks-cn" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../comfy-ui/" class="md-tabs__link">
+          
+  
+  NVIDIA
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../about/" class="md-tabs__link">
+          
+  
+  项目信息
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="DGX Spark Playbooks 中文版" class="md-nav__button md-logo" aria-label="DGX Spark Playbooks 中文版" data-md-component="logo">
+      
+  <img src="../../images/logo.png" alt="logo">
+
+    </a>
+    DGX Spark Playbooks 中文版
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/a576378368/dgx-spark-playbooks-cn" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    首页
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    NVIDIA
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            NVIDIA
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../comfy-ui/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Comfy UI
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../connect-three-sparks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在环形拓扑中连接三个 DGX Spark
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../connect-to-your-spark/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    设置本地网络访问
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../connect-two-sparks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    连接两个 Spark 设备
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cuda-x-data-science/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CUDA-X 数据科学
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dgx-dashboard/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DGX Dashboard
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flux-finetuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FLUX.1 Dreambooth LoRA 微调
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../isaac/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    安装和使用 Isaac Sim 和 Isaac Lab
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jax/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    优化 JAX
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../live-vlm-webui/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Live VLM WebUI
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llama-cpp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 DGX Spark 上使用 llama.cpp 运行模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llama-factory/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LLaMA Factory
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lm-studio/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LM Studio on DGX Spark
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi-agent-chatbot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    构建和部署多智能体聊天机器人
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi-modal-inference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    多模态推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi-sparks-through-switch/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    通过交换机连接多个 DGX Spark
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nccl/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    两个 Spark 的 NCCL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nemoclaw/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    NemoClaw with Nemotron 3 Super 和 Telegram on DGX Spark
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nemo-fine-tune/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 NeMo 进行微调
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nemotron/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nemotron-3-Nano 使用 llama.cpp
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nim-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Spark 上的 NIM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nvfp4-quantization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    NVFP4 量化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ollama/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ollama
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../openclaw/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OpenClaw 🦞
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../open-webui/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Open WebUI
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    OpenShell
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    OpenShell
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      目录
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      概述
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      基本概念
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="基本概念">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      通知和免责声明
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="通知和免责声明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      快速入门安全检查
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      你将获得什么
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      AI 代理的关键风险
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      安全最佳实践
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      你将实现的目标
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      流行用例
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      开始前须知
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      先决条件
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      时间与风险
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      操作说明
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 1. 确认你的环境
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 2. Docker 配置
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-openshell-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 3. 安装 OpenShell CLI
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-dgx-spark-openshell" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 4. 在 DGX Spark 上部署 OpenShell 网关
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-ollama" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 5. 安装 Ollama 并拉取模型
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 6. 创建推理提供者
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 7. 配置推理路由
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-openshell" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 8. 部署 OpenShell 沙箱
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-openshell-openclaw" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 9. 在 OpenShell 沙箱内配置 OpenClaw
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 10. 在沙箱内进行推理
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="步骤 10. 在沙箱内进行推理">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      连接到沙箱（终端）
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 11. 验证沙箱隔离
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 12. 重新连接到沙箱
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 13. 清理
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14" class="md-nav__link">
+    <span class="md-ellipsis">
+      步骤 14. 下一步
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      故障排除
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../portfolio-optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    投资组合优化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pytorch-fine-tune/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PyTorch 微调
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rag-ai-workbench/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    RAG AI Workbench
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sglang/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sglang
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../single-cell/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    单细胞 RNA 测序
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spark-reachy-photo-booth/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Spark & Reachy 照片亭
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../speculative-decoding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    推测性解码
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tailscale/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    设置 Tailscale
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trt-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TRT-LLM 用于推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../txt2kg/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    文本到知识图谱
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../unsloth/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Unsloth 微调
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vibe-coding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    VS Code 中的 Vibe Coding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vllm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    vLLM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vscode/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    VS Code
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vss/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    VSS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    项目信息
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            项目信息
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    关于
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contribute/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    贡献指南
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="dgx-spark-openshell-ai">在 DGX Spark 上使用 OpenShell 运行安全的长期 AI 代理</h1>
+<blockquote>
+<p>在 NVIDIA OpenShell 沙箱中运行 OpenClaw，使用本地模型</p>
+</blockquote>
+<h2 id="_1">目录</h2>
+<ul>
+<li><a href="#概述">概述</a></li>
+<li><a href="#通知和免责声明">通知和免责声明</a></li>
+<li><a href="#操作说明">操作说明</a></li>
+<li><a href="#故障排除">故障排除</a></li>
+</ul>
+<hr />
+<h2 id="_2">概述</h2>
+<h2 id="_3">基本概念</h2>
+<p>OpenClaw 是一个本地优先的 AI 代理，运行在你的机器上，将内存、文件访问、工具使用和社区技能组合成一个持久的助手。直接在系统上运行它意味着代理可以访问你的文件、凭证和网络——这会带来真实的安全风险。</p>
+<p><strong>NVIDIA OpenShell</strong> 解决了这个问题。它是一个开源的沙箱运行时，用内核级隔离和声明式 YAML 策略包装代理。OpenShell 控制代理在磁盘上可以读取什么、可以连接哪些网络端点，以及拥有哪些权限——同时保留使其有用的代理功能。</p>
+<p>通过在 DGX Spark 上将 OpenClaw 与 OpenShell 结合，你将获得本地 AI 代理的全部功能，同时获得 128GB 统一内存支持大型模型，并强制执行对文件系统访问、网络外发和凭证处理的显式控制。</p>
+<h3 id="_4">通知和免责声明</h3>
+<h4 id="_5">快速入门安全检查</h4>
+<p>仅使用干净的环境。在没有个人数据、机密信息或敏感凭证的新设备或 VM 上运行此 playbook。把它想象成一个沙箱——保持隔离。</p>
+<p>通过安装此 playbook，你将承担所有第三方组件的责任，包括审查其许可证、条款和安全状况。安装或使用前请阅读并接受。</p>
+<hr />
+<h4 id="_6">你将获得什么</h4>
+<p>此 playbook 展示了实验性 AI 代理功能。即使在你的工具包中有像 OpenShell 这样的尖端开源工具，你也需要为你的特定威胁模型分层适当的安全措施。</p>
+<hr />
+<h4 id="ai">AI 代理的关键风险</h4>
+<p>注意 AI 代理的这些风险：</p>
+<ol>
+<li>
+<p>数据泄露 - 代理访问的任何材料都可能被泄露、泄露或被盗。</p>
+</li>
+<li>
+<p>恶意代码执行 - 代理或其连接的工具可能使你的系统面临恶意软件或网络攻击。</p>
+</li>
+<li>
+<p>意外操作 - 代理可能会修改或删除文件、发送消息或在没有明确批准的情况下访问服务。</p>
+</li>
+<li>
+<p>提示注入和操作 - 外部输入或连接的内容可能以意外方式劫持代理的行为。</p>
+</li>
+</ol>
+<hr />
+<h4 id="_7">安全最佳实践</h4>
+<p>没有系统是完美的，但这些实践有助于保护你的信息和系统安全。</p>
+<ol>
+<li>
+<p>隔离环境 - 在干净的 PC 或隔离的虚拟机上运行。仅提供代理需要访问的特定数据。</p>
+</li>
+<li>
+<p>永远不要使用真实账户 - 不要连接个人、机密或生产账户。创建具有最小权限的专用测试账户。</p>
+</li>
+<li>
+<p>审查你的技能/插件 - 仅启用受信任来源的技能，最好是经过社区审查的技能。</p>
+</li>
+<li>
+<p>限制访问 - 确保你的 OpenClaw UI 或消息渠道在网络中不可访问，除非有适当的认证。</p>
+</li>
+<li>
+<p>限制网络访问 - 在可行的情况下，限制代理的互联网连接。</p>
+</li>
+<li>
+<p>及时清理 - 完成后，删除 OpenClaw 并撤销你授予的所有凭证、API 密钥和账户访问权限。</p>
+</li>
+</ol>
+<hr />
+<h2 id="_8">你将实现的目标</h2>
+<p>你将安装 OpenShell CLI (<code>openshell</code>)，在你的 DGX Spark 上部署网关，并使用预构建的 OpenClaw 社区沙箱在沙箱环境中启动 OpenClaw。沙箱默认强制执行文件系统、网络和进程隔离。你还将配置本地推理路由，以便 OpenClaw 使用你的 Spark 上运行的模型，而不需要外部 API 密钥。</p>
+<h2 id="_9">流行用例</h2>
+<ul>
+<li>
+<p><strong>安全的代理实验</strong>：测试 OpenClaw 技能和集成，而无需将你的主文件系统或凭证暴露给代理。</p>
+</li>
+<li>
+<p><strong>私有企业开发</strong>：将所有推理路由到 DGX Spark 上的本地模型。除非你在策略中明确允许，否则数据不会离开机器。</p>
+</li>
+<li>
+<p><strong>可审计的代理访问</strong>：将策略 YAML 与你的项目一起版本控制。在授予访问权限之前，准确审查代理可以访问的内容。</p>
+</li>
+<li>
+<p><strong>迭代策略调整</strong>：使用 <code>openshell term</code> 实时监控被拒绝的连接，然后热重载更新的策略，而无需重新创建沙箱。</p>
+</li>
+</ul>
+<h2 id="_10">开始前须知</h2>
+<ul>
+<li>熟悉 Linux 终端和 SSH</li>
+<li>基本了解 Docker（OpenShell 在 Docker 中运行 k3s 集群）</li>
+<li>熟悉 Ollama 进行本地模型服务</li>
+<li>了解安全模型：OpenShell 通过隔离降低风险，但无法消除所有风险。查看 <a href="https://pypi.org/project/openshell/">OpenShell 文档</a> 和 <a href="https://docs.openclaw.ai/gateway/security">OpenClaw 安全指南</a>。</li>
+</ul>
+<h2 id="_11">先决条件</h2>
+<p><strong>硬件要求：</strong>
+- NVIDIA DGX Spark，128GB 统一内存
+- 至少 70GB 可用内存用于大型本地模型（例如 gpt-oss:120b 约 65GB 加上开销），或 25GB+ 用于较小模型（例如 gpt-oss-20b）</p>
+<p><strong>软件要求：</strong>
+- NVIDIA DGX OS（基于 Ubuntu 24.04）
+- 正在运行的 Docker Desktop 或 Docker Engine：<code>docker info</code>
+- Python 3.12 或更高版本：<code>python3 --version</code>
+- <code>uv</code> 包管理器：<code>uv --version</code>（使用 <code>curl -LsSf https://astral.sh/uv/install.sh | sh</code> 安装）
+- Ollama 0.17.0 或更高版本（推荐最新版本以获得 gpt-oss MXFP4 支持）：<code>ollama --version</code>
+- 从 PyPI 下载 Python 包和从 Ollama 下载模型权重的网络访问权限
+- 已安装并配置 <a href="https://build.nvidia.com/spark/connect-to-your-spark">NVIDIA Sync</a> 用于你的 DGX Spark</p>
+<h2 id="_12">时间与风险</h2>
+<ul>
+<li><strong>估计时间：</strong> 20-30 分钟（加上模型下载时间，取决于模型大小和网络速度）。</li>
+</ul>
+<blockquote>
+<p>[!CAUTION] <strong>风险级别：</strong> 中等
+  * OpenShell 沙箱强制执行内核级隔离，与直接在主机上运行 OpenClaw 相比，显著降低了风险。
+  * 沙箱默认策略拒绝所有未明确允许的出站流量。配置不当的策略可能阻止合法的代理流量；使用 <code>openshell logs</code> 进行诊断。
+  * 不稳定的网络可能导致大型模型下载失败。
+* <strong>回滚：</strong> 使用 <code>openshell sandbox delete &lt;sandbox-name&gt;</code> 删除沙箱，使用 <code>openshell gateway stop</code> 停止网关，必要时使用 <code>openshell gateway destroy</code> 销毁它。可以使用 <code>ollama rm &lt;model&gt;</code> 删除 Ollama 模型。
+* <strong>最后更新：</strong> 2026年3月13日</p>
+</blockquote>
+<hr />
+<h2 id="_13">操作说明</h2>
+<h2 id="1">步骤 1. 确认你的环境</h2>
+<p>在安装任何内容之前，验证操作系统、GPU、Docker 和 Python 是否可用。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>head<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span><span class="w"> </span>/etc/os-release
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>nvidia-smi
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>docker<span class="w"> </span>info<span class="w"> </span>--format<span class="w"> </span><span class="s1">&#39;{{.ServerVersion}}&#39;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>python3<span class="w"> </span>--version
+</code></pre></div>
+<p>确保 <a href="https://build.nvidia.com/spark/connect-to-your-spark/sync">NVIDIA Sync</a> 使用自定义端口进行配置：将 "OpenClaw" 作为名称，将 "18789" 作为端口。</p>
+<p>预期输出应显示 Ubuntu 24.04（DGX OS）、检测到的 GPU、Docker 服务器版本和 Python 3.12+。</p>
+<h2 id="2-docker">步骤 2. Docker 配置</h2>
+<p>首先，使用以下命令验证本地用户是否具有 Docker 权限。
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docker<span class="w"> </span>ps
+</code></pre></div></p>
+<p>如果你得到权限被拒绝错误（<code>permission denied while trying to connect to the docker API at unix:///var/run/docker.sock</code>），将你的用户添加到系统的 Docker 组中。这将使你能够运行 Docker 命令而无需 <code>sudo</code>。执行此操作的命令如下：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span>usermod<span class="w"> </span>-aG<span class="w"> </span>docker<span class="w"> </span><span class="nv">$USER</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>newgrp<span class="w"> </span>docker
+</code></pre></div>
+<p>注意，你应该在将用户添加到组后重新启动 Spark，以便此更改对所有终端会话持久生效。</p>
+<p>现在我们已经验证了用户的 Docker 权限，我们必须配置 Docker，使其可以使用 NVIDIA 容器运行时。
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>sudo<span class="w"> </span>nvidia-ctk<span class="w"> </span>runtime<span class="w"> </span>configure<span class="w"> </span>--runtime<span class="o">=</span>docker
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>docker
+</code></pre></div></p>
+<p>运行示例工作负载以验证设置：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>--runtime<span class="o">=</span>nvidia<span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>ubuntu<span class="w"> </span>nvidia-smi
+</code></pre></div>
+<h2 id="3-openshell-cli">步骤 3. 安装 OpenShell CLI</h2>
+<p>创建虚拟环境并安装 <code>openshell</code> CLI。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">cd</span><span class="w"> </span>~
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>uv<span class="w"> </span>venv<span class="w"> </span>openshell-env<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">source</span><span class="w"> </span>openshell-env/bin/activate
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>openshell<span class="w"> </span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>openshell<span class="w"> </span>--help
+</code></pre></div>
+<p>如果你还没有安装 <code>uv</code>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-LsSf<span class="w"> </span>https://astral.sh/uv/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.local/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p>预期输出应显示带有子命令如 <code>gateway</code>、<code>sandbox</code>、<code>provider</code> 和 <code>inference</code> 的 <code>openshell</code> 命令树。</p>
+<h2 id="4-dgx-spark-openshell">步骤 4. 在 DGX Spark 上部署 OpenShell 网关</h2>
+<p>网关是管理沙箱的控制平面。由于你直接在 Spark 上运行，它会在 Docker 内部本地部署。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>openshell<span class="w"> </span>gateway<span class="w"> </span>start
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>openshell<span class="w"> </span>status
+</code></pre></div>
+<p><code>openshell status</code> 应该报告网关为 <strong>Connected</strong>（已连接）。第一次运行可能需要几分钟，因为 Docker 拉取所需的镜像，内部 k3s 集群进行引导。</p>
+<blockquote>
+<p>[!NOTE]
+远程网关部署需要无密码 SSH 访问。确保在使用 <code>--remote</code> 标志之前，你的 SSH 公钥已添加到 <code>~/.ssh/authorized_keys</code> on the DGX Spark.</p>
+<p>[!TIP]
+如果你想从单独的工作站管理 Spark 网关，请从该工作站运行 <code>openshell gateway start --remote &lt;username&gt;@&lt;spark-ssid&gt;.local</code>。所有后续命令将通过 SSH 隧道路由。</p>
+</blockquote>
+<h2 id="5-ollama">步骤 5. 安装 Ollama 并拉取模型</h2>
+<p>安装 Ollama（如果尚未安装）并下载模型以进行本地推理。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://ollama.com/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>ollama<span class="w"> </span>--version
+</code></pre></div>
+<p>DGX Spark 的 128GB 内存可以运行大型模型：</p>
+<table>
+<thead>
+<tr>
+<th>可用 GPU 内存</th>
+<th>推荐模型</th>
+<th>模型大小</th>
+<th>注意</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>25-48 GB</td>
+<td>nemotron-3-nano</td>
+<td>~24GB</td>
+<td>较低延迟，适合交互式使用</td>
+</tr>
+<tr>
+<td>48-80 GB</td>
+<td>gpt-oss:120b</td>
+<td>~65GB</td>
+<td>质量和速度的良好平衡</td>
+</tr>
+<tr>
+<td>128 GB</td>
+<td>nemotron-3-super:120b</td>
+<td>~86GB</td>
+<td>DGX Spark 上的最佳质量</td>
+</tr>
+</tbody>
+</table>
+<p>验证 Ollama 正在运行（安装后自动作为服务启动）。如果未启动，请手动启动：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>ollama<span class="w"> </span>serve<span class="w"> </span><span class="p">&amp;</span>
+</code></pre></div>
+<p>配置 Ollama 监听所有接口，以便 OpenShell 网关容器可以访问它：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/etc/systemd/system/ollama.service.d
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;[Service]\nEnvironment=&quot;OLLAMA_HOST=0.0.0.0&quot;\n&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/systemd/system/ollama.service.d/override.conf
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>ollama
+</code></pre></div>
+<p>验证 Ollama 正在运行并可以在所有接口上访问：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>curl<span class="w"> </span>http://0.0.0.0:11434
+</code></pre></div>
+<p>预期：<code>Ollama is running</code>。如果没有，请使用 <code>sudo systemctl start ollama</code> 启动它。</p>
+<p>接下来，从 Ollama 运行一个模型（调整模型名称以匹配你在步骤 5 中的选择）。<code>ollama run</code> 命令将在模型不存在时自动拉取模型。在此处运行模型可确保它在你使用 OpenClaw 时已加载并准备就绪，减少以后超时的可能性。例如：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>ollama<span class="w"> </span>run<span class="w"> </span>nemotron-3-super:120b
+</code></pre></div>
+<p>输入 <code>/bye</code> 退出。</p>
+<p>验证模型可用：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>ollama<span class="w"> </span>list
+</code></pre></div>
+<h2 id="6">步骤 6. 创建推理提供者</h2>
+<p>我们将创建一个 OpenShell 提供者，指向你的本地 Ollama 服务器。这允许 OpenShell 将推理请求路由到你的 Spark 托管模型。</p>
+<p>首先，找到你的 DGX Spark 的 IP 地址：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>hostname<span class="w"> </span>-I<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $1}&#39;</span>
+</code></pre></div>
+<p>然后创建提供者，将 <code>{Machine_IP}</code> 替换为上述命令中的 IP 地址（例如 <code>10.110.106.169</code>）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>openshell<span class="w"> </span>provider<span class="w"> </span>create<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span>--name<span class="w"> </span>local-ollama<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">    </span>--type<span class="w"> </span>openai<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">    </span>--credential<span class="w"> </span><span class="nv">OPENAI_API_KEY</span><span class="o">=</span>not-needed<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">    </span>--config<span class="w"> </span><span class="nv">OPENAI_BASE_URL</span><span class="o">=</span>http://<span class="o">{</span>Machine_IP<span class="o">}</span>:11434/v1
+</code></pre></div>
+<blockquote>
+<p>[!IMPORTANT]
+<strong>不要</strong>在此处使用 <code>localhost</code> 或 <code>127.0.0.1</code>。OpenShell 网关在 Docker 容器内运行，因此无法通过 <code>localhost</code> 到达主机。使用主机的实际 IP 地址。</p>
+</blockquote>
+<p>验证创建了提供者：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>openshell<span class="w"> </span>provider<span class="w"> </span>list
+</code></pre></div>
+<h2 id="7">步骤 7. 配置推理路由</h2>
+<p>将 <code>inference.local</code> 端点（对每个沙箱可用）指向你的 Ollama 模型。将模型名称替换为你在步骤 5 中的选择：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>openshell<span class="w"> </span>inference<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">    </span>--provider<span class="w"> </span>local-ollama<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">    </span>--model<span class="w"> </span>nemotron-3-super:120b
+</code></pre></div>
+<p>输出应确认路由并显示经过验证的端点 URL，例如：<code>http://10.110.106.169:11434/v1/chat/completions (openai_chat_completions)</code>。</p>
+<blockquote>
+<p>[!NOTE]
+如果你看到 <code>failed to verify inference endpoint</code> 或 <code>failed to connect</code>（例如因为网关无法从其容器内到达主机 IP），添加 <code>--no-verify</code> 跳过端点验证：<code>openshell inference set --provider local-ollama --model nemotron-3-super:120b --no-verify</code>。确保 Ollama 正在运行并监听所有接口（参见步骤 5）。</p>
+</blockquote>
+<p>验证配置：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>openshell<span class="w"> </span>inference<span class="w"> </span>get
+</code></pre></div>
+<p>预期输出应显示 <code>provider: local-ollama</code> 和 <code>model: nemotron-3-super:120b</code>（或你选择的任何模型）。</p>
+<h2 id="8-openshell">步骤 8. 部署 OpenShell 沙箱</h2>
+<p>使用预构建的 OpenClaw 社区沙箱创建沙箱。这从 OpenShell 社区目录中拉取 OpenClaw Dockerfile、默认策略和启动脚本：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>openshell<span class="w"> </span>sandbox<span class="w"> </span>create<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">  </span>--keep<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">  </span>--forward<span class="w"> </span><span class="m">18789</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">  </span>--name<span class="w"> </span>dgx-demo<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">  </span>--from<span class="w"> </span>openclaw<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">  </span>--<span class="w"> </span>openclaw-start
+</code></pre></div>
+<blockquote>
+<p>[!NOTE]
+使用 <code>--from openclaw</code> 时，<strong>不要</strong>使用本地文件路径（例如 <code>openclaw-policy.yaml</code>）传递 <code>--policy</code>。策略与社区沙箱捆绑在一起；本地文件路径可能导致 "file not found"。</p>
+</blockquote>
+<p><code>--keep</code> 标志在初始进程退出后保持沙箱运行，以便你以后可以重新连接。这是默认行为。要使沙箱在初始进程退出时终止，请使用 <code>--no-keep</code> 标志。</p>
+<p>CLI 将：
+1. 根据社区目录解析 <code>openclaw</code>
+2. 拉取并构建容器镜像
+3. 应用捆绑的沙箱策略
+4. 在沙箱内启动 OpenClaw</p>
+<h2 id="9-openshell-openclaw">步骤 9. 在 OpenShell 沙箱内配置 OpenClaw</h2>
+<p>沙箱容器将启动，OpenClaw 入门向导将自动在你的终端中启动。</p>
+<blockquote>
+<p>[!IMPORTANT]
+入门向导是<strong>完全交互式</strong>的——它需要箭头键导航和 Enter 键选择选项。它无法从非交互式会话（例如脚本或自动化工具）完成。你必须从具有完整 TTY 支持的终端运行 <code>openshell sandbox create</code>。</p>
+<p>如果向导未在沙箱创建期间完成，重新连接到沙箱以重新运行它：
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>openshell<span class="w"> </span>sandbox<span class="w"> </span>connect<span class="w"> </span>dgx-demo
+</code></pre></div></p>
+</blockquote>
+<p>使用箭头键和 Enter 键与安装进行交互。
+- 如果你理解并同意，使用你的键盘的箭头键选择 'Yes' 并按 Enter 键。
+- 快速入门与手动：选择快速入门并按 Enter 键。
+- 模型/身份验证提供者：选择 <strong>Custom Provider</strong>（自定义提供者），倒数第二个选项。
+- API 基 URL：更新为 https://inference.local/v1
+- 你希望如何提供此 API 密钥？：暂时选择粘贴 API 密钥。
+- API 密钥：请输入 "ollama"。
+- 端点兼容性：选择 <strong>OpenAI-compatible</strong>（OpenAI 兼容）并按 Enter 键。
+- 模型 ID：输入你在步骤 5 中选择的模型名称（例如 <code>nemotron-3-super:120b</code>）。
+    - 这可能需要 1-2 分钟，因为 Ollama 模型在后台启动。
+- 端点 ID：保留默认值。
+- 别名：输入相同的模型名称（可选）。
+- 频道：选择 <strong>Skip for now</strong>（暂时跳过）。
+- 搜索提供者：选择 <strong>Skip for now</strong>。
+- 技能：暂时选择 <strong>No</strong>。
+- 启用钩子：按空格键选择 <strong>Skip for now</strong> 并按 Enter 键。</p>
+<p>最终阶段可能需要 1-2 分钟。之后，你应该看到一个 URL 和一个令牌，你可以用它连接到网关。预期的输出将相似，但令牌是唯一的。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>OpenClaw<span class="w"> </span>网关在后台启动。
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">  </span>日志:<span class="w"> </span>/tmp/gateway.log
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">  </span>UI:<span class="w">   </span>http://127.0.0.1:18789/?token<span class="o">=</span>9b4c9a9c9f6905131327ce55b6d044bd53e0ec423dd6189e
+</code></pre></div>
+<p>现在我们已经在 OpenShell 沙箱内配置了 OpenClaw，让我们将 openshell 沙箱的名称设置为环境变量。这将使未来的命令更容易运行。请注意，沙箱的名称是在 <code>openshell sandbox create</code> 命令中设置的。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SANDBOX_NAME</span><span class="o">=</span>dgx-demo
+</code></pre></div>
+<p>为了验证为你的沙箱启用的默认策略，请运行以下命令：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>openshell<span class="w"> </span>sandbox<span class="w"> </span>get<span class="w"> </span><span class="nv">$SANDBOX_NAME</span>
+</code></pre></div>
+<blockquote>
+<p>[!NOTE]
+步骤 8 中的 <code>--forward 18789</code> 已经设置了从 OpenShell 网关到沙箱的端口转发。通常情况下，你<strong>不需要</strong>手动使用 <code>ssh</code> 命令与 <code>openshell ssh-proxy</code>。</p>
+</blockquote>
+<p>为了验证转发是否处于活动状态，请使用以下命令：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>openshell<span class="w"> </span>forward<span class="w"> </span>list
+</code></pre></div>
+<p>你应该看到你的沙箱名称（例如 <code>dgx-demo</code>）和端口 <code>18789</code>。如果缺少或 <code>dead</code>（已停止），请启动它：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>openshell<span class="w"> </span>forward<span class="w"> </span>start<span class="w"> </span>--background<span class="w"> </span><span class="m">18789</span><span class="w"> </span><span class="nv">$SANDBOX_NAME</span>
+</code></pre></div>
+<p><strong>路径 A：</strong> 如果你将 Spark 作为主要设备使用，右键单击 UI 部分中的 URL 并选择打开链接。</p>
+<p><strong>路径 B：</strong> 如果你使用的是 Spark 以外的笔记本电脑或工作站（例如你仅通过 SSH 连接到 Spark）：在<strong>该</strong>机器上安装 OpenShell CLI。</p>
+<blockquote>
+<p>[!IMPORTANT]
+<strong>在此机器到 Spark 之间必须可以使用 SSH。</strong>运行 <code>ssh nvidia@&lt;spark-ip&gt;</code>（或你的用户/主机）并确认你获得一个 shell 而没有 <code>Permission denied (publickey)</code>。如果失败，将你的公钥添加到 Spark：<code>ssh-copy-id nvidia@&lt;spark-ip&gt;</code>（从同一台机器），或将你的 <code>~/.ssh/id_ed25519.pub</code>（或 <code>id_rsa.pub</code>）粘贴到 Spark 上的 <code>~/.ssh/authorized_keys</code>。OpenShell 使用此 SSH 会话到达远程 Docker API 并提取网关 TLS 证书。如果使用非默认密钥，将 <code>--ssh-key ~/.ssh/your_key</code> 传递给 <code>gateway add</code>（与步骤 4 的远程网关说明相同）。</p>
+</blockquote>
+<p>注册 Spark 的<strong>已运行</strong>网关。<strong>不要</strong>单独使用 <code>openshell gateway add user@ip</code>—这被解析为云 URL，不会写入 <code>mtls/ca.crt</code>。</p>
+<p>根据 <a href="https://docs.nvidia.com/openshell/latest/sandboxes/manage-gateways.html">OpenShell 网关文档</a>，使用 <strong>hostname <code>openshell</code></strong> 而不是原始 Spark IP 进行 HTTPS。</p>
+<blockquote>
+<p>[!WARNING]
+网关 TLS 证书仅对 <code>openshell</code>、<code>localhost</code> 和 <code>127.0.0.1</code> 有效——<strong>不</strong>适用于你的 Spark 的 LAN IP。如果你使用 <code>https://10.x.x.x:8080</code> 或 <code>ssh://user@10.x.x.x:8080</code>，<code>openshell status</code> 可能会因 <strong>certificate not valid for name "10.x.x.x"</strong> 而失败。</p>
+</blockquote>
+<p><strong>在你的笔记本电脑/WSL 上</strong>，将 <code>openshell</code> 映射到 Spark（每台机器一次）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="c1">## 替换为你的 Spark 的 IP。需要 Linux/WSL 上的 sudo。</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;&lt;spark-ip&gt; openshell&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/hosts
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="c1">## 例如：echo &quot;10.110.17.10 openshell&quot; | sudo tee -a /etc/hosts</span>
+</code></pre></div>
+<p>然后添加网关（SSH 目标保持真实 IP 或主机名；HTTPS URL 使用 <code>openshell</code>）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>openshell<span class="w"> </span>gateway<span class="w"> </span>add<span class="w"> </span>https://openshell:8080<span class="w"> </span>--remote<span class="w"> </span>&lt;user&gt;@&lt;spark-ip&gt;
+</code></pre></div>
+<p>例如：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>openshell<span class="w"> </span>gateway<span class="w"> </span>add<span class="w"> </span>https://openshell:8080<span class="w"> </span>--remote<span class="w"> </span>nvidia@10.110.17.10
+</code></pre></div>
+<p>如果你已经使用 IP 注册并看到证书错误，请删除该条目并重新添加：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>openshell<span class="w"> </span>gateway<span class="w"> </span>destroy<span class="w"> </span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>openshell<span class="w"> </span>gateway<span class="w"> </span>add<span class="w"> </span>https://openshell:8080<span class="w"> </span>--remote<span class="w"> </span>nvidia@10.110.17.10
+</code></pre></div>
+<p>（使用 <code>openshell gateway select</code> 如果销毁名称不同。）</p>
+<p>完成任何浏览器或 CLI 提示直到命令完成（不要过早按 Ctrl+C）。然后：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>openshell<span class="w"> </span>status<span class="w">   </span><span class="c1"># 应该显示 Connected，而不是 TLS CA 错误</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>openshell<span class="w"> </span>forward<span class="w"> </span>start<span class="w"> </span>--background<span class="w"> </span><span class="m">18789</span><span class="w"> </span>dgx-demo
+</code></pre></div>
+<p>然后在<strong>笔记本电脑</strong>浏览器中打开（使用 <code>#token=</code> 以便 UI 接收网关令牌）：</p>
+<p><code>http://127.0.0.1:18789/#token=&lt;your-token&gt;</code></p>
+<p>使用来自 Spark 上 OpenClaw 向导输出的令牌值。路径 B 需要从笔记本电脑到 Spark 的 SSH，以便 CLI 可以在 <code>:8080</code> 上到达网关。</p>
+<p><strong>NVIDIA Sync：</strong> 右键单击 UI 中的 URL 并选择复制链接。在 Sync 中连接到你的 Spark，打开 OpenClaw 条目，并将 URL 粘贴到浏览器地址栏中。</p>
+<p>从此页面，你现在可以<strong>聊天</strong>与你的 OpenClaw 代理，在 OpenShell 提供的受保护环境中。</p>
+<h2 id="10">步骤 10. 在沙箱内进行推理</h2>
+<h4 id="_14">连接到沙箱（终端）</h4>
+<p>现在 OpenClaw 已在 OpenShell 受保护的运行时内配置，你可以直接通过以下方式连接到沙箱环境：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>openshell<span class="w"> </span>sandbox<span class="w"> </span>connect<span class="w"> </span><span class="nv">$SANDBOX_NAME</span>
+</code></pre></div>
+<p>加载到沙箱终端后，你可以使用此命令测试与 Ollama 模型的连接：
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>curl<span class="w"> </span>https://inference.local/v1/responses<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="w">          </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">          </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="s1">        &quot;instructions&quot;: &quot;You are a helpful assistant.&quot;,</span>
+<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a><span class="s1">        &quot;input&quot;: &quot;Hello!&quot;</span>
+<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a><span class="s1">      }&#39;</span>
+</code></pre></div></p>
+<h2 id="11">步骤 11. 验证沙箱隔离</h2>
+<p>打开第二个终端并检查沙箱状态和实时日志：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="nb">source</span><span class="w"> </span>~/openshell-env/bin/activate
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>openshell<span class="w"> </span>term
+</code></pre></div>
+<p>终端仪表板显示：
+- <strong>沙箱状态</strong> — 名称、阶段、镜像、提供者和端口转发
+- <strong>实时日志流</strong> — 出站连接、策略决策 (<code>allow</code>、<code>deny</code>、<code>inspect_for_inference</code>) 和推理拦截</p>
+<p>验证 OpenClaw 代理是否可以到达 <code>inference.local</code> 进行模型请求，以及未授权的出站流量是否被拒绝。</p>
+<blockquote>
+<p>[!TIP]
+按 <code>f</code> 跟随实时输出，<code>s</code> 按源过滤，<code>q</code> 退出终端仪表板。</p>
+</blockquote>
+<h2 id="12">步骤 12. 重新连接到沙箱</h2>
+<p>如果你退出沙箱会话，随时可以重新连接：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>openshell<span class="w"> </span>sandbox<span class="w"> </span>connect<span class="w"> </span><span class="nv">$SANDBOX_NAME</span>
+</code></pre></div>
+<blockquote>
+<p>[!NOTE]
+<code>openshell sandbox connect</code> 是交互式独占的——它在沙箱内打开一个终端会话。无法传递命令进行非交互式执行。使用 <code>openshell sandbox upload</code>/<code>download</code> 进行文件传输，或使用 <code>openshell sandbox ssh-config</code> 进行脚本 SSH（参见步骤 14）。</p>
+</blockquote>
+<p>要将文件上传或下载出沙箱，请使用以下命令：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>openshell<span class="w"> </span>sandbox<span class="w"> </span>upload<span class="w"> </span><span class="nv">$SANDBOX_NAME</span><span class="w"> </span>./local-file<span class="w"> </span>/sandbox/destination
+<a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a>openshell<span class="w"> </span>sandbox<span class="w"> </span>download<span class="w"> </span><span class="nv">$SANDBOX_NAME</span><span class="w"> </span>/sandbox/file<span class="w"> </span>./local-destination
+</code></pre></div>
+<h2 id="13">步骤 13. 清理</h2>
+<p>停止并删除沙箱：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>openshell<span class="w"> </span>sandbox<span class="w"> </span>delete<span class="w"> </span><span class="nv">$SANDBOX_NAME</span>
+</code></pre></div>
+<p>删除你在步骤 6 中创建的推理提供者：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>openshell<span class="w"> </span>provider<span class="w"> </span>delete<span class="w"> </span>local-ollama
+</code></pre></div>
+<p>停止网关（保留状态以备以后使用）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>openshell<span class="w"> </span>gateway<span class="w"> </span>stop
+</code></pre></div>
+<blockquote>
+<p>[!WARNING]
+以下命令永久删除网关集群及其所有数据。</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>openshell<span class="w"> </span>gateway<span class="w"> </span>destroy
+</code></pre></div>
+<p>还要删除 Ollama 模型：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a>ollama<span class="w"> </span>rm<span class="w"> </span>nemotron-3-super:120b
+</code></pre></div>
+<h2 id="14">步骤 14. 下一步</h2>
+<ul>
+<li>
+<p><strong>添加更多提供者</strong>：使用 <code>openshell provider create</code> 附加 GitHub 令牌、GitLab 令牌或云 API 密钥作为提供者。创建沙箱时，使用 <code>--provider &lt;name&gt;</code>（例如 <code>--provider my-github</code>）将这些凭证注入沙箱中安全使用。</p>
+</li>
+<li>
+<p><strong>尝试其他社区沙箱</strong>：运行 <code>openshell sandbox create --from base</code> 或 <code>--from sdg</code> 以获得其他预构建环境。</p>
+</li>
+<li>
+<p><strong>连接 VS Code</strong>：使用 <code>openshell sandbox ssh-config &lt;sandbox-name&gt;</code> 并将输出附加到 <code>~/.ssh/config</code> 以直接将 VS Code Remote-SSH 连接到沙箱。</p>
+</li>
+<li>
+<p><strong>监控和审核</strong>：使用 <code>openshell logs &lt;sandbox-name&gt; --tail</code> 或 <code>openshell term</code> 持续监控代理活动和策略决策。</p>
+</li>
+</ul>
+<hr />
+<h2 id="_15">故障排除</h2>
+<table>
+<thead>
+<tr>
+<th>症状</th>
+<th>原因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>openshell gateway start</code> 因 "connection refused" 或 Docker 错误而失败</td>
+<td>Docker 未运行</td>
+<td>使用 <code>sudo systemctl start docker</code> 启动 Docker 或启动 Docker Desktop，然后重试 <code>openshell gateway start</code></td>
+</tr>
+<tr>
+<td><code>openshell status</code> 显示网关不健康</td>
+<td>网关容器崩溃或初始化失败</td>
+<td>运行 <code>openshell gateway destroy</code> 然后 <code>openshell gateway start</code> 重新创建它。使用 <code>docker ps -a</code> 和 <code>docker logs &lt;container-id&gt;</code> 检查 Docker 日志获取详情</td>
+</tr>
+<tr>
+<td><code>openshell sandbox create --from openclaw</code> 无法构建</td>
+<td>拉取社区沙箱或 Dockerfile 构建失败的网络问题</td>
+<td>检查互联网连接。重试命令。如果构建在特定包上失败，请检查基础镜像是否与你的 Docker 版本兼容</td>
+</tr>
+<tr>
+<td>创建后沙箱处于 <code>Error</code> 阶段</td>
+<td>策略验证失败或容器启动崩溃</td>
+<td>运行 <code>openshell logs &lt;sandbox-name&gt;</code> 查看错误详情。常见原因：无效的策略 YAML、缺少的提供者凭证或端口冲突</td>
+</tr>
+<tr>
+<td>代理无法在沙箱内到达 <code>inference.local</code></td>
+<td>未配置推理路由或提供者无法访问</td>
+<td>运行 <code>openshell inference get</code> 验证提供者和模型是否已设置。测试主机上 Ollama 是否可访问：<code>curl http://localhost:11434/api/tags</code>。确保提供者 URL 使用 <code>host.docker.internal</code> 而不是 <code>localhost</code></td>
+</tr>
+<tr>
+<td>503 验证失败或网关/沙箱访问主机上的 Ollama 时超时</td>
+<td>Ollama 仅绑定到 localhost，或主机防火墙阻止端口 11434</td>
+<td>使 Ollama 监听所有接口，以便网关容器（例如在 Docker 网络 172.17.x.x 上）可以访问它：<code>OLLAMA_HOST=0.0.0.0 ollama serve &amp;</code>。允许端口 11434 通过主机防火墙：<code>sudo ufw allow 11434/tcp comment 'Ollama for OpenShell Gateway'</code>（然后 <code>sudo ufw reload</code> 如果需要）</td>
+</tr>
+<tr>
+<td>代理的所有出站连接都被拒绝</td>
+<td>默认策略不包括所需的端点</td>
+<td>使用 <code>openshell logs &lt;sandbox-name&gt; --tail --source sandbox</code> 监控拒绝。使用 <code>openshell policy get &lt;sandbox-name&gt; --full</code> 拉取当前策略，在 <code>network_policies</code> 下添加所需的主机/端口，并使用 <code>openshell policy set &lt;sandbox-name&gt; --policy &lt;file&gt; --wait</code> 推送</td>
+</tr>
+<tr>
+<td>"Permission denied" 或沙箱内的 Landlock 错误</td>
+<td>代理尝试访问文件系统策略中未包含的路径</td>
+<td>拉取当前策略并在 <code>read_write</code>（或如果读访问足够则在 <code>read_only</code>）中添加路径。推送更新的策略。注意：文件系统策略是静态的，需要重新创建沙箱</td>
+</tr>
+<tr>
+<td>Ollama OOM 或推理非常缓慢</td>
+<td>模型太大，无法在可用内存或 GPU 竞争中运行</td>
+<td>释放 GPU 内存（关闭其他 GPU 工作负载）、尝试较小的模型（例如 <code>gpt-oss:20b</code>）或减少上下文长度。使用 <code>nvidia-smi</code> 监控</td>
+</tr>
+<tr>
+<td><code>openshell sandbox connect</code> 挂起或超时</td>
+<td>沙箱未处于 <code>Ready</code> 阶段</td>
+<td>运行 <code>openshell sandbox get &lt;sandbox-name&gt;</code> 检查阶段。如果卡在 <code>Provisioning</code>，请等待或检查日志。如果处于 <code>Error</code>，请删除并重新创建沙箱</td>
+</tr>
+<tr>
+<td>策略推送返回退出码 1（验证失败）</td>
+<td>格式错误的 YAML 或无效的策略字段</td>
+<td>检查 YAML 语法。常见问题：路径不以 <code>/</code> 开头、路径中的 <code>..</code> 遍历、<code>root</code> 作为 <code>run_as_user</code>，或缺少所需 <code>host</code>/<code>port</code> 字段的端点。修复并重新推送</td>
+</tr>
+<tr>
+<td><code>openshell gateway start</code> 因 "K8s namespace not ready" / 等待命名空间超时而失败</td>
+<td>Docker 容器内的 k3s 集群比 CLI 超时时间需要更长的时间进行引导。内部组件（TLS 密钥、Helm 图表、命名空间创建）可能需要额外的时间，尤其是在首次运行时在容器内拉取镜像时。</td>
+<td>首先，检查容器是否仍在运行并进展：<code>docker ps --filter name=openshell</code>（查看 <code>health: starting</code>）。检查容器内的 k3s 状态：<code>docker exec &lt;container&gt; sh -c "KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl get ns"</code> 和 <code>kubectl get pods -A</code>。如果 pod 处于 <code>ContainerCreating</code> 且 TLS 密钥丢失（<code>navigator-server-tls</code>、<code>openshell-server-tls</code>），集群仍在引导——等待几分钟并再次运行 <code>openshell status</code>。如果它没有恢复，请使用 <code>openshell gateway destroy</code>（和 <code>docker rm -f &lt;container&gt;</code> 如果需要）销毁并重试 <code>openshell gateway start</code>。确保 Docker 有足够的资源（内存和磁盘）用于 k3s 集群。</td>
+</tr>
+<tr>
+<td><code>openshell status</code> 显示 "No gateway configured" 即使 Docker 容器正在运行</td>
+<td><code>gateway start</code> 命令失败或在保存网关配置之前超时</td>
+<td>容器可能仍然健康——使用 <code>docker ps --filter name=openshell</code> 检查。如果容器正在运行且健康，请再次尝试 <code>openshell gateway start</code>（它应该检测到现有的容器）。如果容器不健康或卡住，请使用 <code>docker rm -f &lt;container&gt;</code> 删除它，然后 <code>openshell gateway destroy</code>，然后 <code>openshell gateway start</code>。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>[!NOTE]
+DGX Spark 使用统一内存架构（UMA），启用 GPU 和 CPU 内存之间的动态共享。
+随着许多应用程序仍在更新以利用 UMA，你可能会在 DGX Spark 的内存容量内遇到内存问题。如果发生这种情况，请手动刷新缓冲区缓存：
+<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a>sudo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;sync; echo 3 &gt; /proc/sys/vm/drop_caches&#39;</span>
+</code></pre></div></p>
+</blockquote>
+<p>有关最新的已知问题，请查看 <a href="https://docs.nvidia.com/dgx/dgx-spark/known-issues.html">DGX Spark 用户指南</a>。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © 2026 YangFeng
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/a576378368" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://hub.docker.com/" target="_blank" rel="noopener" title="hub.docker.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M349.9 236.3h-66.1v-59.4h66.1zm0-204.3h-66.1v60.7h66.1zm78.2 144.8H362v59.4h66.1zm-156.3-72.1h-66.1v60.1h66.1zm78.1 0h-66.1v60.1h66.1zm276.8 100c-14.4-9.7-47.6-13.2-73.1-8.4-3.3-24-16.7-44.9-41.1-63.7l-14-9.3-9.3 14c-18.4 27.8-23.4 73.6-3.7 103.8-8.7 4.7-25.8 11.1-48.4 10.7H2.4c-8.7 50.8 5.8 116.8 44 162.1 37.1 43.9 92.7 66.2 165.4 66.2 157.4 0 273.9-72.5 328.4-204.2 21.4.4 67.6.1 91.3-45.2 1.5-2.5 6.6-13.2 8.5-17.1zm-511.1-27.9h-66v59.4h66.1v-59.4zm78.1 0h-66.1v59.4h66.1zm78.1 0h-66.1v59.4h66.1zm-78.1-72.1h-66.1v60.1h66.1z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.python.org/" target="_blank" rel="noopener" title="www.python.org" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6M286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3M167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4m-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.sections", "toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.56dfad97.min.js"></script>
+      
+    
+  </body>
+</html>
