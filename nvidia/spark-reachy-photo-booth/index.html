@@ -1,0 +1,2506 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="NVIDIA DGX Spark 中文使用指南">
+      
+      
+      
+        <link rel="canonical" href="https://a576378368.github.io/dgx-spark-playbooks-cn/nvidia/spark-reachy-photo-booth/">
+      
+      
+        <link rel="prev" href="../single-cell/">
+      
+      
+        <link rel="next" href="../speculative-decoding/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Spark & Reachy 照片亭 - DGX Spark Playbooks 中文版</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#spark-reachy" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="DGX Spark Playbooks 中文版" class="md-header__button md-logo" aria-label="DGX Spark Playbooks 中文版" data-md-component="logo">
+      
+  <img src="../../images/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            DGX Spark Playbooks 中文版
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Spark & Reachy 照片亭
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/a576378368/dgx-spark-playbooks-cn" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../comfy-ui/" class="md-tabs__link">
+          
+  
+  
+  NVIDIA
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../about/" class="md-tabs__link">
+          
+  
+  
+  项目信息
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="DGX Spark Playbooks 中文版" class="md-nav__button md-logo" aria-label="DGX Spark Playbooks 中文版" data-md-component="logo">
+      
+  <img src="../../images/logo.png" alt="logo">
+
+    </a>
+    DGX Spark Playbooks 中文版
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/a576378368/dgx-spark-playbooks-cn" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NVIDIA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    NVIDIA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../comfy-ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Comfy UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../connect-three-sparks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    在环形拓扑中连接三个 DGX Spark
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../connect-to-your-spark/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    设置本地网络访问
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../connect-two-sparks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    连接两个 Spark 设备
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cuda-x-data-science/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CUDA-X 数据科学
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dgx-dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DGX Dashboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flux-finetuning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FLUX.1 Dreambooth LoRA 微调
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../isaac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    安装和使用 Isaac Sim 和 Isaac Lab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jax/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    优化 JAX
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../live-vlm-webui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live VLM WebUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llama-cpp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    在 DGX Spark 上使用 llama.cpp 运行模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llama-factory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LLaMA Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lm-studio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LM Studio on DGX Spark
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi-agent-chatbot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    构建和部署多智能体聊天机器人
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi-modal-inference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    多模态推理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi-sparks-through-switch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    通过交换机连接多个 DGX Spark
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nccl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    两个 Spark 的 NCCL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nemoclaw/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NemoClaw with Nemotron 3 Super 和 Telegram on DGX Spark
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nemo-fine-tune/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    使用 NeMo 进行微调
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nemotron/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nemotron-3-Nano 使用 llama.cpp
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nim-llm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spark 上的 NIM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nvfp4-quantization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NVFP4 量化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ollama/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ollama
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../openclaw/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenClaw 🦞
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../open-webui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Open WebUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../openshell/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenShell
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../portfolio-optimization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    投资组合优化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pytorch-fine-tune/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PyTorch 微调
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rag-ai-workbench/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG AI Workbench
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sglang/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    sglang
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../single-cell/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    单细胞 RNA 测序
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spark & Reachy 照片亭
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spark & Reachy 照片亭
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        目录
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概述
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        基本概念
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        你将实现的目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        开始前须知
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        先决条件
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        辅助文件
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        时间与风险
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        操作说明
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        步骤 1. 克隆仓库
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        步骤 2. 创建你的环境
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-reachy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        步骤 3. 设置 Reachy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        步骤 4. 启动堆栈
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        步骤 5. 在浏览器中打开 UI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-qr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        步骤 6. 可选：在本地网络上启用 QR 码共享
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="步骤 6. 可选：在本地网络上启用 QR 码共享">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-spark-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 找到你的 Spark 的本地 IP 地址
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-minio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 确保 MinIO 可以从你的手机访问
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-env" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 更新 .env 并重新启动
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        步骤 7. 可选：进一步操作和自定义应用程序
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="步骤 7. 可选：进一步操作和自定义应用程序">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        指南
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        服务配置
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        开发
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        开发
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        步骤 1. 系统依赖
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        步骤 2. 了解构建和开发过程
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        步骤 3. 对应用程序进行更改
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="步骤 3. 对应用程序进行更改">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        自定义配置参数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        使用新工具扩展演示
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        创建你自己的服务
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        故障排除
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../speculative-decoding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    推测性解码
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tailscale/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    设置 Tailscale
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trt-llm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TRT-LLM 用于推理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../txt2kg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    文本到知识图谱
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../unsloth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Unsloth 微调
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vibe-coding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VS Code 中的 Vibe Coding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vllm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    vLLM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vscode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VS Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vss/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VSS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    项目信息
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    项目信息
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    关于
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contribute/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    贡献指南
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="spark-reachy">Spark &amp; Reachy 照片亭</h1>
+<blockquote>
+<p>使用 DGX Spark 和 Reachy Mini 的 AI 增强照片亭</p>
+</blockquote>
+<h2 id="_1">目录</h2>
+<ul>
+<li><a href="#概述">概述</a></li>
+<li><a href="#操作说明">操作说明</a></li>
+<li><a href="#指南">指南</a></li>
+<li><a href="#服务配置">服务配置</a></li>
+<li><a href="#开发">开发</a></li>
+<li><a href="#自定义配置参数">自定义配置参数</a></li>
+<li><a href="#使用新工具扩展演示">使用新工具扩展演示</a></li>
+<li><a href="#创建你自己的服务">创建你自己的服务</a></li>
+<li><a href="#故障排除">故障排除</a></li>
+</ul>
+<hr />
+<h2 id="_2">概述</h2>
+<h2 id="_3">基本概念</h2>
+<p><img alt="封面" src="assets/teaser.jpg" /></p>
+<p>Spark &amp; Reachy 照片亭是一个交互式和事件驱动的照片亭演示，结合了 <strong>DGX Spark™</strong> 和 <strong>Reachy Mini</strong> 机器人，以创建引人入胜的多模态 AI 体验。该系统展示了：</p>
+<ul>
+<li><strong>一个多模态代理</strong>，使用 <code>NeMo Agent Toolkit</code> 构建</li>
+<li><strong>一个 ReAct 循环</strong>，由 <code>openai/gpt-oss-20b</code> LLM 驱动，由 <code>TensorRT-LLM</code> 提供支持</li>
+<li><strong>语音交互</strong>，基于 <code>nvidia/riva-parakeet-ctc-1.1B</code> 和 <code>hexgrad/Kokoro-82M</code></li>
+<li><strong>图像生成</strong>，使用 <code>black-forest-labs/FLUX.1-Kontext-dev</code> 进行图像到图像的重新样式化</li>
+<li><strong>用户位置跟踪</strong>，使用 <code>facebookresearch/detectron2</code> 和 <code>FoundationVision/ByteTrack</code> 构建</li>
+<li><strong>MinIO</strong>，用于存储捕获/生成的图像以及通过 QR 码共享</li>
+</ul>
+<p>演示基于通过消息总线通信的多个服务。</p>
+<p><img alt="架构图" src="assets/architecture-diagram.png" /></p>
+<p>另请参阅此 playbook 的演示视频：<a href="https://www.youtube.com/watch?v=6f1x8ReGLjc">视频</a></p>
+<blockquote>
+<p>[!NOTE]
+此 playbook 适用于 Reachy Mini Lite。Reachy Mini（带板载 Raspberry Pi）可能需要轻微调整。为简化起见，我们将在本 playbook 中将机器人统称为 Reachy。</p>
+</blockquote>
+<h2 id="_4">你将实现的目标</h2>
+<p>你将在 DGX Spark 上部署一个完整照片亭系统，本地运行多个推理模型——LLM、图像生成、语音识别、语音生成和计算机视觉——所有这些都不依赖云。Reachy 机器人通过自然对话与用户交互，拍摄照片，并根据提示生成自定义图像，展示了在边缘硬件上实时多模态 AI 处理。</p>
+<h2 id="_5">开始前须知</h2>
+<ul>
+<li>基本的 Docker 和 Docker Compose 知识</li>
+<li>基本的网络配置技能</li>
+</ul>
+<h2 id="_6">先决条件</h2>
+<p><strong>硬件要求：</strong>
+- <a href="https://www.nvidia.com/en-us/products/workstations/dgx-spark/">NVIDIA DGX Spark</a>
+- 用于直接在 DGX Spark 上运行此 playbook 的显示器、键盘和鼠标。
+- <a href="https://pollen-robotics-reachy-mini.hf.space/">Reachy Mini 或 Reachy Mini Lite 机器人</a></p>
+<blockquote>
+<p>[!TIP]
+确保你的 Reachy 机器人固件是最新的。你可以找到更新它的说明<a href="https://huggingface.co/spaces/pollen-robotics/Reachy_Mini">此处</a>。为简化起见，我们将机器人统称为 Reachy。</p>
+</blockquote>
+<p><strong>软件要求：</strong>
+- 官方 <a href="https://docs.nvidia.com/dgx/dgx-spark/dgx-os.html">DGX Spark OS</a> 镜像，包括所有必需的实用程序，如 Git、Docker、NVIDIA 驱动程序和 NVIDIA Container Toolkit
+- DGX Spark 的互联网连接
+- NVIDIA NGC 个人 API 密钥 (<strong><code>NVIDIA_API_KEY</code></strong>）。<a href="https://org.ngc.nvidia.com/setup/api-keys">创建一个密钥</a>（如果需要）。确保在创建密钥时启用 <code>NGC Catalog</code> 范围。
+- Hugging Face 访问令牌 (<strong><code>HF_TOKEN</code></strong>)。<a href="https://huggingface.co/settings/tokens">创建一个令牌</a>（如果需要）。确保创建具有 <em>Read access to contents of all public gated repos you can access</em>（读取你可以访问的所有公共门控存储库内容的权限）的令牌。</p>
+<h2 id="_7">辅助文件</h2>
+<p>所有必需的资产都可以在 <a href="https://github.com/NVIDIA/spark-reachy-photo-booth">Spark &amp; Reachy 照片亭存储库</a> 中找到。</p>
+<ul>
+<li>Docker Compose 应用程序</li>
+<li>各种配置文件</li>
+<li>所有服务的源代码</li>
+<li>详细文档</li>
+</ul>
+<h2 id="_8">时间与风险</h2>
+<ul>
+<li><strong>估计时间：</strong> 2 小时包括硬件设置、容器构建和模型下载</li>
+<li><strong>风险级别：</strong> 中等</li>
+<li><strong>回滚：</strong> 可以停止和删除 Docker 容器以释放资源。可以从缓存目录中删除下载的模型。可以安全地断开机器人和外设连接。可以通过删除自定义设置来恢复网络配置。</li>
+<li><strong>最后更新：</strong> 2026年4月1日</li>
+<li>1.0.0 首次发布</li>
+<li>1.0.1 文档改进</li>
+</ul>
+<hr />
+<h2 id="_9">操作说明</h2>
+<h2 id="1">步骤 1. 克隆仓库</h2>
+<p>为了轻松管理容器而无需 <code>sudo</code>，你必须在 <code>docker</code> 组中。如果你选择跳过此步骤，你将需要使用 <code>sudo</code> 运行 Docker 命令。</p>
+<p>打开新终端并测试 Docker 访问。在终端中，运行：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>docker<span class="w"> </span>ps
+</code></pre></div>
+<p>如果你看到权限被拒绝错误（类似于尝试连接到 Docker 守护进程套接字时被拒绝），将你的用户添加到 docker 组，这样你就不需要使用 <code>sudo</code> 运行该命令。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>sudo<span class="w"> </span>usermod<span class="w"> </span>-aG<span class="w"> </span>docker<span class="w"> </span><span class="nv">$USER</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>newgrp<span class="w"> </span>docker
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/NVIDIA/spark-reachy-photo-booth.git
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">cd</span><span class="w"> </span>spark-reachy-photo-booth
+</code></pre></div>
+<blockquote>
+<p>[!WARNING]
+此 playbook 预期在你的 DGX Spark 上直接运行，并使用包含的 Web 浏览器。</p>
+</blockquote>
+<h2 id="2">步骤 2. 创建你的环境</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cp<span class="w"> </span>.env.example<span class="w"> </span>.env
+</code></pre></div>
+<p>编辑 <code>.env</code> 并设置：</p>
+<ul>
+<li><strong><code>NVIDIA_API_KEY</code></strong>：你的 NVIDIA API 密钥（必须以 <code>nvapi-...</code> 开头）</li>
+<li><strong><code>HF_TOKEN</code></strong>：你的 Hugging Face 令牌（必须以 <code>hf_...</code> 开头）</li>
+<li><strong><code>EXTERNAL_MINIO_BASE_URL</code></strong>：保留不变，除非你想要（请参阅"在本地网络上启用 QR 码共享"部分）</li>
+</ul>
+<p>要访问 FLUX.1-Kontext-dev 模型，请登录你的 Hugging Face 账户，然后审查并接受 <a href="https://huggingface.co/black-forest-labs/FLUX.1-Kontext-dev">FLUX.1-Kontext-dev</a> 和 <a href="https://huggingface.co/black-forest-labs/FLUX.1-Kontext-dev-onnx">FLUX.1-Kontext-dev-onnx</a> 许可协议和可接受使用政策。</p>
+<p>其余值为本地开发配置了合理的默认值（MinIO）。对于生产部署或不受信任的环境，应更改这些值并安全存储。</p>
+<h2 id="3-reachy">步骤 3. 设置 Reachy</h2>
+<ul>
+<li>将电源线插入 Reachy 的底部并插入电源插座。</li>
+<li>将 USB-C 线缆插入 Reachy 的底部并插入 DGX Spark。</li>
+<li>启动 Reachy 底部的电源开关。开关旁边的 LED 应该变红。</li>
+</ul>
+<p>你可以通过运行验证机器人是否被检测到：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>lsusb<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>Reachy
+</code></pre></div>
+<p>你应该在终端中看到一个类似于 <code>Bus 003 Device 003: ID 38fb:1001 Pollen Robotics Reachy Mini Audio</code> 的设备打印。</p>
+<p>运行以下命令以确保 Reachy 扬声器可以达到最大音量。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>./robot-controller-service/scripts/speaker_setup.sh
+</code></pre></div>
+<p><img alt="设置" src="assets/setup.jpg" /></p>
+<h2 id="4">步骤 4. 启动堆栈</h2>
+<p>登录到 nvcr.io 注册表：
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>docker<span class="w"> </span>login<span class="w"> </span>nvcr.io<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;\$oauthtoken&quot;</span>
+</code></pre></div></p>
+<p>当提示输入密码时，输入你的 NGC 个人 API 密钥。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>--build<span class="w"> </span>-d
+</code></pre></div>
+<p>此命令拉取并构建容器镜像，并下载所需的模型工件。首次运行可能需要 30 分钟到 2 小时，具体取决于你的互联网速度。后续运行通常在大约 5 分钟内完成。</p>
+<h2 id="5-ui">步骤 5. 在浏览器中打开 UI</h2>
+<p>在 DGX Spark 上，打开 Firefox（预安装）并浏览到 <strong>Web UI</strong>：<a href="http://127.0.0.1:3001">http://127.0.0.1:3001</a>。</p>
+<blockquote>
+<p>[!TIP]
+仅当所有容器都正在运行时，Web UI 才可访问。
+你还可以使用 <code>docker compose ps --format "table {{.ID}}\t{{.Names}}\t{{.Status}}"</code> 检查所有容器的状态。
+如果一个或多个容器失败，请使用 <code>docker compose logs -f &lt;container_name&gt;</code> 检查日志。</p>
+<p>[!TIP]
+你可以通过启用 X11 转发的 ssh 会话远程 <strong>观看</strong> 进行中的交互（<code>ssh -X &lt;USER&gt;@&lt;SPARK_IP&gt;</code>）。
+你应该能够从此会话打开 Firefox 并连接到 <a href="http://127.0.0.1:3001">http://127.0.0.1:3001</a>。</p>
+<p>[!NOTE]
+UI 对图像生成的性能有轻微影响。为了优化体验中的图像生成步骤的性能，你可以安装并使用 Chromium 而不是 Firefox，以及降低显示分辨率。</p>
+</blockquote>
+<h2 id="6-qr">步骤 6. 可选：在本地网络上启用 QR 码共享</h2>
+<p>Reachy 可以拍摄人们的照片并根据它们生成图像。Web UI 显示生成的图像以及 QR 码以供下载。本节解释如何设置系统，以便 QR 码可以从用户手机上打开。</p>
+<p>要使 QR 码在你的手机上打开，你的 DGX Spark 和手机必须在同一个本地网络上。确保你的路由器允许网络内的设备到设备通信。</p>
+<h4 id="1-spark-ip">1. 找到你的 Spark 的本地 IP 地址</h4>
+<p>在 Spark 上，运行以下命令：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>ip<span class="w"> </span>-f<span class="w"> </span>inet<span class="w"> </span>addr<span class="w"> </span>show<span class="w"> </span>enP7s7<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>inet
+</code></pre></div>
+<p>如果您的 Spark 通过 Wi-Fi 连接，请使用此命令</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>ip<span class="w"> </span>-f<span class="w"> </span>inet<span class="w"> </span>addr<span class="w"> </span>show<span class="w"> </span>wlP9s9<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>inet
+</code></pre></div>
+<p>找到 LAN 上的 IPv4（通常类似于 <code>192.168.x.x</code> 或 <code>10.x.x.x</code>）。</p>
+<h4 id="2-minio">2. 确保 MinIO 可以从你的手机访问</h4>
+<ul>
+<li><strong>同一网络</strong>：将你的手机连接到与 DGX Spark 相同的 Wi-Fi/LAN。</li>
+<li><strong>防火墙</strong>：默认情况下，DGX Spark 不会阻止传入请求。如果你安装了防火墙，请允许 <strong><code>9010</code> (MinIO API)</strong> 的入站流量到 DGX Spark。</li>
+</ul>
+<h4 id="3-env">3. 更新 <code>.env</code> 并重新启动</h4>
+<p>编辑 <code>.env</code> 并替换：</p>
+<ul>
+<li><strong><code>EXTERNAL_MINIO_BASE_URL=127.0.0.1:9010</code></strong> → <strong><code>EXTERNAL_MINIO_BASE_URL=&lt;SPARK_LAN_IP&gt;:9010</code></strong></li>
+</ul>
+<p>然后重新启动：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>down
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>--build<span class="w"> </span>-d
+</code></pre></div>
+<h2 id="7">步骤 7. 可选：进一步操作和自定义应用程序</h2>
+<h3 id="_10">指南</h3>
+<ul>
+<li><a href="https://github.com/NVIDIA/spark-reachy-photo-booth/tree/main/docs/getting-started.md">入门</a> – 详细的设置和配置指南</li>
+<li><a href="https://github.com/NVIDIA/spark-reachy-photo-booth/tree/main/docs/writing-your-first-service.md">编写你的第一个服务</a> – 如何创建和集成新服务</li>
+</ul>
+<h3 id="_11">服务配置</h3>
+<p>每个服务都有自己的 README，其中包含自定义、环境变量和服务特定配置的详细信息：</p>
+<table>
+<thead>
+<tr>
+<th>服务</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/NVIDIA/spark-reachy-photo-booth/tree/main/agent-service/README.md">agent-service</a></td>
+<td>LLM 驱动的代理工作流和决策逻辑</td>
+</tr>
+<tr>
+<td><a href="https://github.com/NVIDIA/spark-reachy-photo-booth/tree/main/animation-compositor-service/README.md">animation-compositor-service</a></td>
+<td>结合动画片段和音频混合</td>
+</tr>
+<tr>
+<td><a href="https://github.com/NVIDIA/spark-reachy-photo-booth/tree/main/animation-database-service/README.md">animation-database-service</a></td>
+<td>动画库和程序动画生成</td>
+</tr>
+<tr>
+<td><a href="https://github.com/NVIDIA/spark-reachy-photo-booth/tree/main/camera-service/README.md">camera-service</a></td>
+<td>相机捕获和图像获取</td>
+</tr>
+<tr>
+<td><a href="https://github.com/NVIDIA/spark-reachy-photo-booth/tree/main/interaction-manager-service/README.md">interaction-manager-service</a></td>
+<td>事件编排和机器人语音管理</td>
+</tr>
+<tr>
+<td><a href="https://github.com/NVIDIA/spark-reachy-photo-booth/tree/main/metrics-service/README.md">metrics-service</a></td>
+<td>指标收集和监控</td>
+</tr>
+<tr>
+<td><a href="https://github.com/NVIDIA/spark-reachy-photo-booth/tree/main/remote-control-service/README.md">remote-control-service</a></td>
+<td>基于 Web 的远程控制界面</td>
+</tr>
+<tr>
+<td><a href="https://github.com/NVIDIA/spark-reachy-photo-booth/tree/main/robot-controller-service/README.md">robot-controller-service</a></td>
+<td>直接机器人硬件控制</td>
+</tr>
+<tr>
+<td><a href="https://github.com/NVIDIA/spark-reachy-photo-booth/tree/main/speech-to-text-service/README.md">speech-to-text-service</a></td>
+<td>音频转录（NVIDIA Riva/Parakeet）</td>
+</tr>
+<tr>
+<td><a href="https://github.com/NVIDIA/spark-reachy-photo-booth/tree/main/text-to-speech-service/README.md">text-to-speech-service</a></td>
+<td>语音合成</td>
+</tr>
+<tr>
+<td><a href="https://github.com/NVIDIA/spark-reachy-photo-booth/tree/main/tracker-service/README.md">tracker-service</a></td>
+<td>人物检测和跟踪</td>
+</tr>
+<tr>
+<td><a href="https://github.com/NVIDIA/spark-reachy-photo-booth/tree/main/ui-server-service/README.md">ui-server-service</a></td>
+<td>Web UI 的后端</td>
+</tr>
+</tbody>
+</table>
+<p>有关自定义服务配置、使用新工具扩展演示或创建你自己的服务的详细指南，请参阅 <a href="development">开发</a> 选项卡。</p>
+<hr />
+<h2 id="_12">开发</h2>
+<h2 id="_13">开发</h2>
+<p>本节提供了自定义和开发 Reachy 照片亭应用程序的综合说明。如果你正在寻找部署和运行应用程序而不进行修改，请参考 <a href="instructions">操作说明</a> 选项卡 - 此开发指南专门针对需要对应用程序进行修改的人。</p>
+<h2 id="1_1">步骤 1. 系统依赖</h2>
+<p>为了使用仓库的 Python 开发设置，请安装以下软件包：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>python3.12-dev<span class="w"> </span>portaudio19-dev
+</code></pre></div>
+<p>要创建 Python <strong>venv</strong>，请按照<a href="https://docs.astral.sh/uv/getting-started/installation/">此处</a>的说明安装 uv。</p>
+<p>然后运行以下命令以生成 Python <strong>venv</strong>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>uv<span class="w"> </span>sync<span class="w"> </span>--all-packages
+</code></pre></div>
+<h2 id="2_1">步骤 2. 了解构建和开发过程</h2>
+<p>每个以 <code>-service</code> 结尾的文件夹都是在其自己的容器中运行的独立 Python 程序。你必须始终通过与存储库根目录的 <code>docker-compose.yaml</code> 交互来启动服务。你可以通过运行以下命令启用所有 Python 服务的代码热重载：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>--build<span class="w"> </span>--watch
+</code></pre></div>
+<p>每当你更改存储库中的 Python 代码时，相关的容器将被更新并自动重启。</p>
+<p><a href="https://github.com/NVIDIA/spark-reachy-photo-booth/tree/main/docs/getting-started.md">入门</a> 指南提供了构建系统、开发工作流、调试策略和监控基础设施的综合指南。</p>
+<h2 id="3">步骤 3. 对应用程序进行更改</h2>
+<p>现在你的开发环境已设置好，以下是开发人员通常探索的最常见的自定义。</p>
+<h3 id="_14">自定义配置参数</h3>
+<p>每个服务都有可配置的参数，包括系统提示、音频设备、模型设置等。请检查各个服务的 README 和 <code>src/configuration.py</code> 文件以获取详细的配置选项。请注意，<code>src/configuration.py</code> 中的默认配置也可能在 <code>compose.yaml</code> 文件中被覆盖。请查看以下服务以入门：</p>
+<ul>
+<li><a href="https://github.com/NVIDIA/spark-reachy-photo-booth/tree/main/speech-to-text-service/README.md">speech-to-text-service</a> - 配置音频设备和转录设置</li>
+<li><a href="https://github.com/NVIDIA/spark-reachy-photo-booth/tree/main/text-to-speech-service/README.md">text-to-speech-service</a> - 调整语音合成参数</li>
+<li><a href="https://github.com/NVIDIA/spark-reachy-photo-booth/tree/main/agent-service/README.md">agent-service</a> - 自定义 LLM 系统提示、代理行为和决策逻辑</li>
+</ul>
+<p>另请参阅 <a href="instructions">操作说明</a> 获取所有服务及其 README 的完整列表。</p>
+<h3 id="_15">使用新工具扩展演示</h3>
+<p>agent-service 和 interaction-manager-service 是使用新功能扩展演示的核心服务：</p>
+<ul>
+<li><a href="https://github.com/NVIDIA/spark-reachy-photo-booth/tree/main/agent-service/README.md">agent-service</a> - 在此处添加新代理工具和功能</li>
+<li><a href="https://github.com/NVIDIA/spark-reachy-photo-booth/tree/main/interaction-manager-service/README.md">interaction-manager-service</a> - 管理事件编排和机器人语音</li>
+</ul>
+<h3 id="_16">创建你自己的服务</h3>
+<p><a href="https://github.com/NVIDIA/spark-reachy-photo-booth/tree/main/docs/writing-your-first-service.md">编写你的第一个服务</a> 指南提供了在系统中对新微服务进行脚手架、实现和集成的逐步教程。按照此指南创建自定义服务以扩展照片亭功能。</p>
+<hr />
+<h2 id="_17">故障排除</h2>
+<table>
+<thead>
+<tr>
+<th>症状</th>
+<th>原因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>机器人没有声音（音量低）</td>
+<td>Reachy 扬声器音量默认设置得太低</td>
+<td>将 Reachy 扬声器音量增加到最大</td>
+</tr>
+<tr>
+<td>机器人没有声音（设备冲突）</td>
+<td>另一个应用程序捕获 Reachy 扬声器</td>
+<td>检查 <code>animation-compositor</code> 日志中的 "Error querying device (-1)"，验证 Reachy 扬声器未在 Ubuntu 声音设置中设置为系统默认值，确保没有其他应用程序捕获扬声器，然后重新启动演示</td>
+</tr>
+<tr>
+<td>首次启动时图像生成失败</td>
+<td>瞬态初始化问题</td>
+<td>重新运行 <code>docker compose up --build -d</code> 以解决此问题</td>
+</tr>
+</tbody>
+</table>
+<p>如果你有任何 Reachy 问题未涵盖此指南，请阅读 <a href="https://huggingface.co/docs/reachy_mini/troubleshooting">Hugging Face 的官方故障排除指南</a>。</p>
+<blockquote>
+<p>[!NOTE]
+DGX Spark 使用统一内存架构（UMA），允许 GPU 和 CPU 内存之间的动态共享。
+随着许多应用程序仍在更新以利用 UMA，即使在 DGX Spark 的内存容量内，你也可能遇到内存问题。如果发生这种情况，请手动刷新缓冲区缓存：
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>sudo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;sync; echo 3 &gt; /proc/sys/vm/drop_caches&#39;</span>
+</code></pre></div></p>
+</blockquote>
+<p>有关最新的已知问题，请查看 <a href="https://docs.nvidia.com/dgx/dgx-spark/known-issues.html">DGX Spark 用户指南</a>。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © 2026 YangFeng
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/a576378368" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://hub.docker.com/" target="_blank" rel="noopener" title="hub.docker.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M349.9 236.3h-66.1v-59.4h66.1zm0-204.3h-66.1v60.7h66.1zm78.2 144.8H362v59.4h66.1zm-156.3-72.1h-66.1v60.1h66.1zm78.1 0h-66.1v60.1h66.1zm276.8 100c-14.4-9.7-47.6-13.2-73.1-8.4-3.3-24-16.7-44.9-41.1-63.7l-14-9.3-9.3 14c-18.4 27.8-23.4 73.6-3.7 103.8-8.7 4.7-25.8 11.1-48.4 10.7H2.4c-8.7 50.8 5.8 116.8 44 162.1 37.1 43.9 92.7 66.2 165.4 66.2 157.4 0 273.9-72.5 328.4-204.2 21.4.4 67.6.1 91.3-45.2 1.5-2.5 6.6-13.2 8.5-17.1zm-511.1-27.9h-66v59.4h66.1v-59.4zm78.1 0h-66.1v59.4h66.1zm78.1 0h-66.1v59.4h66.1zm-78.1-72.1h-66.1v60.1h66.1z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.python.org/" target="_blank" rel="noopener" title="www.python.org" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6M286.2 444.7a20.4 20.4 0 1 1 0-40.7 20.4 20.4 0 1 1 0 40.7M167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4m-6.6-183.4a20.4 20.4 0 1 1 0 40.8 20.4 20.4 0 1 1 0-40.8"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
